@@ -31,4 +31,3 @@ DEFAULT_PAGINATION = 10
 
 THEME = 'notmyidea'
 STATIC_PATHS = ['images', 'CNAME', 'favicon.ico']
-
