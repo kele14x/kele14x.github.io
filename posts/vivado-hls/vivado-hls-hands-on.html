@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2016-07-02" />
+  <title>Vivado HLS 简单上手</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Vivado HLS 简单上手</h1>
+<p class="date">2016-07-02</p>
+</header>
+<p>Vivado HLS 是 Xilinx 的 Vivado 设计套件中的一个组件，它可以将 C/C++/System C 代码编译到 FPGA 设计中常用的 Verilog，VHDL 代码。这些代码可以进一步在 Vivado 中进行综合，最终产生可用的 FPGA 网表。</p>
+<!--more-->
+<h2 id="优势">优势</h2>
+<p>其实不管是 FPGA 还是别的技术，都只是实现你的“计算”的手段。这个计算可能是数字信号处理、逻辑控制、图像压缩等等。FPGA 在诸多常用的手段中是有它的独到特色和优势的，具体也不再废话。但是劣势也很明显，这是摘自 Xilinx <a href="http://www.xilinx.com/support/documentation/sw_manuals/ug998-vivado-intro-fpga-design-hls.pdf">UG998 - Introduction to FPGA Design with Vivado High-Level Synthesis</a> 一文中的一张图：</p>
+<figure>
+<img src="/image/hls-fpga-rtl-dev.png" alt="fpga-rtl-dev.png" /><figcaption aria-hidden="true">fpga-rtl-dev.png</figcaption>
+</figure>
+<p>实际写过 FPGA 大概就明白，这张图是比较中肯的，很多高速运算是需要依靠 FPGA 的（比如比特币矿机）。但是 FPGA 最常用的设计语言，Verilog 和 VHDL，就像上古时代的汇编一样。高效，控制力强，但是超麻烦。</p>
+<p>一次，我需要在 FPGA 内写一个 2D 线性插值的模块，算法很简单：</p>
+<p><span class="math display">$$ y = c_0 + (c_1-c_0)\frac{x_1}{S} + (c_2-c_0)\frac{x_2}{S} + (c_3-c_2-c_1+c_0)\frac{x_1 x_2}{S^2} $$</span></p>
+<p>其中 <span class="math inline"><em>c</em><sub><em>i</em></sub>, <em>x</em><sub><em>j</em></sub></span> 都是输入，<span class="math inline"><em>S</em></span> 是常数。计算上面的公式需要若干加法器和乘法器（除法用位移来代替）。按照常规的思路，我开始规划先算哪几个加法或是乘法，然后算哪几个运算。其中需要注意加法器和乘法器的延迟来对其数据，同时还要考虑每个中间步骤的位宽，注释其意义。折腾了相当久，最后发现这模块我居然写出来了上百行。</p>
+<p>第二天再看自己的代码，被恶心到的同时，我决定尝试下 HLS。上手花了一些时间，但总体效果还是可以。上述 2D 插值模块的 C 代码不过几行，编译不过几秒。如果以后需要修改位宽什么的，也仅需简单修改几个定义:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// file: interp2d.c</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;ap_cint.h&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> interp2d <span class="op">(</span>int12 c0<span class="op">,</span> int12 c1<span class="op">,</span> int12 c2<span class="op">,</span> int12 c3<span class="op">,</span> uint6 x1<span class="op">,</span> uint6 x2<span class="op">,</span> int12 <span class="op">*</span> y<span class="op">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>y <span class="op">=</span> c0 <span class="op">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">(((</span>c1 <span class="op">-</span> c0<span class="op">)</span> <span class="op">*</span> x1<span class="op">)</span> <span class="op">&gt;&gt;</span> <span class="dv">6</span><span class="op">)</span> <span class="op">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">(((</span>c2 <span class="op">-</span> c0<span class="op">)</span> <span class="op">*</span> x2<span class="op">)</span> <span class="op">&gt;&gt;</span> <span class="dv">6</span><span class="op">)</span> <span class="op">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">(((</span>c3 <span class="op">-</span> c2 <span class="op">-</span> c1 <span class="op">+</span> c0<span class="op">)</span> <span class="op">*</span> x1 <span class="op">*</span> x2<span class="op">)</span> <span class="op">&gt;&gt;</span> <span class="dv">12</span><span class="op">);</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>最后 Vivado HLS 会给你 Verilog，VHDL 和 System C 代码，它们可以直接拷贝出去用（尽管没有什么可读性），或者帮你包装成 Xilinx 格式的 IP。</p>
+<h2 id="基本概念">基本概念</h2>
+<p>C/C++ 代码到 RTL 的基本映射关系大概是：</p>
+<pre class="plain"><code>Functions     -&gt; Modules
+Ariguments    -&gt; Input/ouput ports
+Operators     -&gt; Functional units
+Scalars       -&gt; Wries or registers
+Arrays        -&gt; Memories
+Control flows -&gt; Control logics</code></pre>
+<p>最重要的是第一条，一个 C/C++ 函数对应一个 RTL 模块。HLS 会让你设置一个 <strong>Top Function</strong>，其实就是 RTL 设计中的 <strong>Top Module</strong>。函数对应的参数就是模块输入输出接口。</p>
+<p>你在函数内用 C/C++ 在算法层次描述你想要做什么，HLS 拿到你的代码考虑怎么用 FPGA 内的常用资源来实现它。这样在某种程度上你丢失了一些控制力，但是如果编译器足够聪明，从代码到成果的转换效率会提高不少。</p>
+<p>事实上，HLS 这个编译器还并不那么聪明。比如它只能做单一时钟的设计；只支持 C/C++ 语法中的一个很小的子集。很多时候，一个模块不只是 C/C++ 代码，还需要用户写不少 <strong>directive</strong> 来指导编译器。</p>
+<p>更多的一些基本概念可以看看<a href="http://www.ese.wustl.edu/~xuan.zhang/ese566_files/tutorials/vivado_tutorial.pdf">这个文档</a>和上面提到的 Xilinx 的 UG998。而下一步，自然是先去磕 Xilinx 官方的教程。</p>
+<h2 id="缺点">缺点</h2>
+<p>Vivado HLS 并不能完全的替代 Vivado，因为它的定位仅仅是模块/IP的设计。另外也并不是所有的模块 HLS 都能够（方便的）设计出来。一般来说，FPGA 内会进行两种工作：其一是数值计算，其二是逻辑控制。HLS 更擅长进行数值计算类模块的设计，而要设计逻辑控制类的模块，比如 UART 收发器，就有些不知如何是好了。</p>
+<p>另外，HLS 生成的 IP，并不能像很多 Xilinx 提供的或者 HDL 编写的 IP 那样可以通过设置 <strong>Parameters</strong> 来作通用化。修改参数（比如位宽）只能从源代码级修改再生成。</p>
+<p>最后 HLS 的模块接口设计并不是那么得心应手，控制信号和时序有些时候显得有点奇怪。还需要打开 Vivado 进行 RTL 仿真来看看怎么用。</p>
+</body>
+</html>
