@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2016-02-13" />
+  <title>12 硬币小游戏</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  true
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">12 硬币小游戏</h1>
+<p class="date">2016-02-13</p>
+</header>
+<h2 id="一些废话">一些废话</h2>
+<p><a href="http://book.douban.com/subject/1079701/">《萨姆·劳埃德的数学趣题续编》</a>（[美] 马丁·加德纳）这本书大概是十多年前，我还是噼咔噼咔的高中生时读的一本书，也算是我的数学启蒙读物。里面有一道这样的题：</p>
+<blockquote>
+<p><img src="/image/coins-13-bowling.png" title="瑞普·凡·温克尔的游戏" /></p>
+</blockquote>
+<blockquote>
+<p>古代丹麦有一种滚球游戏，据说现代的保龄球就是从它演变而来的。这种游戏玩的时候，将 13 根木柱在地上站成一行，然后用一只球猛击其中一根木柱或相邻的两根木柱。由于击球着距离木柱极近，玩这种游戏无需什么特殊的技巧，即可随心所欲的击倒任一木柱或相邻的两根木柱。比赛者轮流击球，谁击倒最后一根木柱，谁就是赢家。</p>
+</blockquote>
+<blockquote>
+<p>同瑞普·凡·温克尔进行比赛的是一位身体矮小的山神，他刚刚击倒了第 2 号木柱。瑞普应该在 22 种可能性中最初抉择：要么击倒 12 根木柱中的一根，要么把球向 10 个空当中的任一个投去，以使一次同时击倒两根相邻的木柱。为了赢得这一局，瑞普应该怎么做才好？假定比赛双方都能随便击倒其中一根或相邻的一对木柱，而且双方都是足智多谋的游戏老手。</p>
+</blockquote>
+<p>这道题不是重点，于是我也不卖关子直接给出原书上的答案：</p>
+<blockquote>
+<p>为了保持在“昏睡山谷”（Sleepy Hollow）中的冠军地位，瑞普应该击倒第 6 号木柱。这样一来，木柱就被分为 1 根、3 根、7 根三组。接下去，无论瑞普的对手施展什么伎俩，只要瑞普采用正确的测略，对手一定要输。矮山神想要取胜，他开始时应该击倒第 7 号木柱，以便将木柱分成各有 6 根木柱的两组。此后，无论瑞普投掷哪一个组里的木柱，山神只要在另一组里重演瑞普的动作，直到最终取得胜利为止。</p>
+</blockquote>
+<p>当然，原书里说的这种游戏的历史应该是瞎扯的。关于这个游戏的结论也很明确了：先手必胜，但是如果先手脑抽弄错了（例如，像题里说的，先击倒了 2 号），那么后手即为必胜。</p>
+<h2 id="起因">起因</h2>
+<p>后来我滚去读大学，那也是很多年以前的了。我问了室友这道题：</p>
+<blockquote>
+<p>12 个硬币依次相邻，两个人轮流取走硬币；每人每个回合可以取走任意 1 枚，或者相邻的 2 枚硬币；取走最后一枚硬币的人为<strong>负</strong>。先手或者后手应该怎么玩？</p>
+</blockquote>
+<p>当然，考虑到 13 这个数字不是很吉利而改成 12，以及把胜利条件反转的主意应该不是我的，应该是我在另外某本书里看到的，但是现在的我实在记不清了。</p>
+<p>当时的我和室友的课程刚到“C 程序基础”，于是室友沉思片刻之后，说：“这个迭代一下就能出来。”然后它打开 Turbo C 给我写了个 AI——黑乎乎的 CMD 窗口，AI 还会很贱的在你走到死路的时候告诉你：</p>
+<blockquote>
+<p>You are a dead man.</p>
+</blockquote>
+<p>年代久远，关于这件事的很多细节的记忆已经很模糊。不过我还记得当时的我完全没有看懂室友的那么几十行代码。甚至也没有看出来上面的话很有可能是《北斗神拳》的梗。挣扎了很久之后室友无奈的说：“看别人的代码确实挺费劲。”我则感到无地自容。</p>
+<p>不知为何，前几天我又突然想起来这件事情，于是打算再考虑一下这个问题——<strong>取 12 个硬币的小游戏，先手或者后手是否有必胜的策略呢？</strong></p>
+<h2 id="结果">结果</h2>
+<p>前面的废话已经很多，关于结果也就不再啰嗦：这个问题其实很简单，只要你想清楚了这件事——如果你的对手足够聪明，当轮到你取走硬币时，看到棋局你就能知道：</p>
+<ul>
+<li>0: 无论你怎么走，你的对手都有必胜的策略（即你输定了）</li>
+<li>1: 你有必胜的策略（即你赢定了）</li>
+</ul>
+<p>而不存在其它的情况，即：</p>
+<ul>
+<li>2: 胜负尚待以后的回合才能见分晓</li>
+</ul>
+<p>也就是说每个棋局的状态，都具是上述类型之一，分别编号为 0、1、2。为了证明不存在类型 2，我们先假定存在它。</p>
+<p>首先将棋局的状态用数组 \(s = [a_1, a_2, a_3, … , a_{12}]\) 表示。</p>
+<p><span class="math display"><em>a</em><sub><em>i</em></sub> = 0, 1; <em>i</em> = 1, 2, 3, ..., 12</span></p>
+<p>\(a_i\) 等于 0 表示对应位置的硬币已经被取走，等于 1 表示未被取走。在游戏刚开始时，\(s_{start}=[1,1,1,1,1,1,1,1,1,1,1,1]\)，结束时 \(s_{end}=[0,0,0,0,0,0,0,0,0,0,0,0]\)。显然存在一个函数 \(f\)，对于任意的棋局状态\(s\)，\(f(s)\) 等于 \(s\) 的类型。即函数 \(f\) 能够求出棋局状态的类型：</p>
+<p><span class="math display"><em>f</em>(<em>s</em>) = 0, 1, 2</span></p>
+<p>0,1,2 的含义已经解释过了。对于任意非全零的棋局状态 \(s\)，都存在一个合法的下个棋局状态的集合。设函数 \(g\) 能够求出它：</p>
+<p><span class="math display"><em>g</em>(<em>s</em>) = {<em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ..., <em>s</em>′<sub><em>n</em></sub>}</span></p>
+<p>如果 \(s’_1, s’_2, …, s’_n\) 中存在一个或多个元素满足 \(f(s’_k)=0\)，那么 \(f(s)=1\)（即，你采用某种取法，你的对手是必输的，自然你是必胜的）；如果 \(s’_1, s’_2, …s’_n\) 中的元素都满足\(f(s’_k)=1\)，那么 \(f(s)=0\)（即无论你采用任何一种取法，你的对手都是必胜的，自然你是必输的）；而其它的情况，\(f(s)=2\)。</p>
+<p>假设存在 \(s_0\)，使得 \(f(s_0)=2\)，并且 \(g(s_0)={s’_1, s’_2, …, s’_n}\)。显然，\(s’_1, s’_2, …s’_n\) 中不可能存在 \(s’_k\) 使得 \(f(s’_k)=0\)。同样的，\(s’_1, s’_2, …, s’_n\) 不可能都满足 \(f(s’_k)=1\)。这样，\(s’_1, s’_2, …, s’_n\) 中必然存在\(s’_k\)，满足 \(f(s’_k)=2\)。</p>
+<p>上面得出的结论的意思是，如果某个棋局状态的类型是 2，那么它的某个合法的下一个状态也肯定是类型 2——也就是说，游戏双方采用某种取硬币的方法，永远都不会分出胜负——这显然是违背常理的，这个游戏只有有限的状态，有限的步数，一定会分出胜负。</p>
+<p>借助于计算机程序，我们只需实现函数 \(f, g\)，就能迭代出 \(f(s_{start})\)。\(f\) 大概长这样：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">f</span>(s) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (s <span class="op">==</span> [<span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span>])</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 并不奇怪，你的对手已经被逼取走了最后一个硬币，你已经赢了！</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (next_s <span class="kw">in</span> <span class="fu">g</span>(s)) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">f</span>(next_s) <span class="op">==</span> <span class="dv">0</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>那么\(f([1,1,1,1,1,1,1,1,1,1,1,1])\)的值是多少呢？在实际编程之前，还需要注意到我们可以用另一种方式表示棋局的类型，即 12 个硬币分成几组，每组几个。例如\(s = [12]\)表示游戏刚开始的状态，\(s=[2,9]\)表示有人取走了 1 枚硬币（不用具体在意是哪枚）而把剩下的 11 个硬币分成了两组，一组有 2 个相邻，一组有 9 个相邻。</p>
+<p>我试着实现了这个程序，你可以在这个页面按 <strong>F12</strong> 打开浏览器的开发者工具，找到 js console 试试：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>([<span class="dv">12</span>])</span></code></pre></div>
+<p>好吧，室友在多年前虐我的问题终于算是想明白了。</p>
+<h2 id="最后">最后</h2>
+<p>感谢 <a href="https://plus.google.com/u/0/107552441700509994147">+PZ Read</a> 在<a href="https://plus.google.com/u/0/+MichiruMorishita/posts/2yymPYDHMNG">我 G+ 帖子</a>里的指点，这个游戏有个名字叫做 <a href="https://en.wikipedia.org/wiki/Kayles">Kayles Game</a>，是<a href="https://en.wikipedia.org/wiki/Combinatorial_game_theory">组合博弈</a>中相当简单的一种，有成熟的理论指导。Wikipedia 上有很多相关的内容，不再赘述。</p>
+<script src="/script/12_coins_game.js"></script>
+</body>
+</html>

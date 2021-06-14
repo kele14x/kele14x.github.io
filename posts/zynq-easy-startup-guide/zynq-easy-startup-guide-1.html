@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ZYNQ Easy Startup Guide, Part I</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ZYNQ Easy Startup Guide, Part I</h1>
+<p class="date">2020-02-13T00:00:00+08:00</p>
+</header>
+<p>Xilinx release Vitis tool last year, replaces it’s old Xilinx SDK. There is few documents for it, and I’m planning to switch to it from SDK. Let’s try start from sketch so that we can study some basic concepts. <strong>Part I</strong> will including a simple PL design and a simple single core bare metal PS program, from project to boot on board.</p>
+<!--more-->
+<h2 id="required-things">Required Things</h2>
+<h3 id="software-tools">Software Tools</h3>
+<p>From 2019.2, for bare metal, Xilinx provides 2 tools for ZYNQ chips:</p>
+<ul>
+<li><a href="https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html">Vivado (design suit)</a>, including <em>Vivado</em>, <em>Vivado HLS</em>, <em>System Generator</em> and <em>Model Composer</em>s. These tools are mainly for PL (FPGA part in ZYNQ) development.</li>
+<li><a href="https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vitis.html">Vitis IDE</a>. It’s for PS side development. Also AI Engine and accelerate application is done in Vitis.</li>
+</ul>
+<p>Download and install Vitis IDE, since the installer includes Vivado. Full tool installation is recommend even you does not have license from some tool. But only install required device family to reduce size. Installing is quite straight forward, just run the installer and follow the wizard.</p>
+<h3 id="development-board">Development Board</h3>
+<p>My dev board is PYNQ-Z2. It’s much cheap than famous <a href="http://zedboard.org/product/zedboard">ZedBoard</a> but with essential peripherals. Bare board package without power adaptor/SD card/cables is enough. For more information:</p>
+<ul>
+<li>http://www.pynq.io/board.html</li>
+<li>http://www.tul.com.tw/ProductsPYNQ-Z2.html</li>
+</ul>
+<p>However, we won’t use PYNQ’s pre-build image.</p>
+<h3 id="test-jtag-and-uart-connection">Test JTAG and UART Connection</h3>
+<p>PYNQ-Z2 only require one USB cable connection with PC. This cable is used for both power, JTAG and UART connection. If more power is required, dedicated power cable can be used. Connect the cable and open <strong>Vivado -&gt; Open Hardware Manager</strong> to test JTAG connection.</p>
+<ul>
+<li>UART and JTAG connection is done via <strong>FTDI FT2232HL</strong> USB-UART &amp; USB-JTAG bridge chip. The driver should be installed automatically for windows 10 and Ubuntu, so no driver installation is need. If need to install the driver manually, refer to <a href="https://www.ftdichip.com/Products/ICs/FT2232H.html">FT2232H’s product page</a>.</li>
+<li>Remember the COM port number for UART connection. For windows, it should be COMx. For linux, the name should be /dev/ttyUSBx.</li>
+</ul>
+<h2 id="step1.-pl-platform-design">Step1. PL (Platform) Design</h2>
+<p>PL side design including:</p>
+<ul>
+<li>One block design which contains <strong>ZYNQ processing system</strong> IP.</li>
+<li>Other logic design, including RTL, IP, Block Design.</li>
+</ul>
+<p>ZYNQ’s PS does not require PL side running, however PS side design needs some initial files, which need to be generated from Vivado (You do not want to initial every register in <em>main.c</em>). Let’s start a simplest project.</p>
+<h3 id="step-1.1-create-vivado-project">Step 1.1 Create Vivado Project</h3>
+<ol type="1">
+<li>Download PYNQ-Z2 board file <a href="http://www.tul.com.tw/ProductsPYNQ-Z2.html">TUL</a>. These files including board information and presets for PYNQ-Z2. Also many documents for this board is on this page.</li>
+<li><strong>Unzip</strong> the board file to <strong>C:\Xilinx\Vivado\2019.2\data\boards\board_files\</strong>. After install these files, you can select pynq-z2 from Vivado’s board select menu.</li>
+<li>Start Vivado, create a project, selecting part <strong>pynq-z2 (xc7z020clg400-1)</strong>.</li>
+</ol>
+<h3 id="step-1.2-block-design">Step 1.2 Block Design</h3>
+<ol type="1">
+<li>In Vivado project, create a block design.</li>
+<li>Add IP <strong>ZYNQ7 Processing System</strong> (PS7) to block design.</li>
+<li>Click <em>Run Block Automation</em> from menu, this will load many preset parameters (most importantly, DDR parameters) for PS7 IP from board file.</li>
+<li>Connect <code>FCLK_CLK0</code> to <code>M_AXI_GP0_ACLK</code> for PS7 IP. This clocks GP0 port using FCLK, or the GP0 port will not work, and let us pass DRC check.</li>
+<li>Create a HDL wrapper for block design, Since Vivado requires a HDL file/module as top.</li>
+<li>Do synthesis, implementation, and generate bitstream. There will be many warnings, review and ignore them.</li>
+<li>Export <em>.xsa</em> file from menu ** File -&gt; Export -&gt; Export Hardware…**</li>
+</ol>
+<h3 id="about-.xsa-file">About .xsa File</h3>
+<p><strong>.xsa</strong> file replace old <strong>.hdf</strong> file as hardware export result. But as the same, you can rename the file to <strong>.zip</strong> and unzip it. There are many interesting files in the zip. You can view them.</p>
+<h2 id="step-2.-platform-and-domain-bsp-design">Step 2. Platform and Domain (BSP) Design</h2>
+<p>Xilinx are developing more complex heterogeneous chip (mixing different type of chips together). There are more number and types of processer in Xilinx’s new chips. For ZYNQ7 series, there are only three: 2 Cortex-A7 processer and one FPGA. For new chips, there may be AI Engine (Math Engine), Cortex-A53, Cortex-R5, FPGA and RF SoC. Things are becoming complex, so does software development. There are 4 concepts for Vitis IDE: <em>Platform</em>, <em>Domain</em>, <em>System</em> and <em>Application</em>, replace the <em>Platform</em>, <em>BSP</em> and <em>Application</em> in SDK. Let’s care about <em>platform</em> and <em>domain</em> firstly. In fact, they are BSPs in SDK.</p>
+<ul>
+<li><strong>Platform Project</strong>: Platform project are generated from <strong>.xsa</strong> file. I think platform project should represents one chip and FPGA design in this chip. (Sorry I does not have experience on AI engine and RF SoC chip). On platform project holds one or more <em>domains</em>.</li>
+<li><strong>Domain</strong>: Domain replace the old <strong>BSP project</strong> in SDK. One domain represents one OS/application. It serves as library support package for application or OS. One domain can span one or more isomorphic processers.</li>
+</ul>
+<p>For our case, we have one platform, which will be generated from the .xsa file we got on first step. We will have on domain named <strong>bare metal domain on cortexa9_0</strong>. We will leave cortexa9_1 unused.</p>
+<p>If we want to run two bare metal application on two Cortex-A9. We will need two domains. Second domain should be named <strong>bare metal domain on cortexa9_1</strong>.</p>
+<p>If we want to run one Linux on both Cortex-A9. We will need only one domain, named <strong>Linux domain on cortexa9</strong>.</p>
+<h3 id="step-2.1.-create-platform-project">Step 2.1. Create Platform Project</h3>
+<ol type="1">
+<li>Copy the <strong>.xsa</strong> file to somewhere.</li>
+<li>Launch Vitis IDE. Create a new Platform Project. Selecting the <strong>.xsa</strong> file.</li>
+<li>Select <strong>standalone</strong> and <strong>ps7_cortexa9_0</strong>, finish the wizard.</li>
+<li>Build the platform project.</li>
+</ol>
+<h3 id="step-2.2.-review-the-domain-in-platform">Step 2.2. Review the Domain in Platform</h3>
+<p>Double click the <strong>.spr</strong> file. Two domains are automatically add by the wizard:</p>
+<ul>
+<li><strong>zynq_fsbl</strong> domain. The domain’s type is <em>standalone</em>. Which is used for <strong>FSBL</strong> application. Also the <strong>FSBL</strong> application project with source code is added and build.</li>
+<li><strong>standalone on ps7_cortexa9_0</strong>. The type is also <em>standalone</em>. This is for your further application.</li>
+</ul>
+<h2 id="step-3.-system-and-application-design">Step 3. System and Application Design</h2>
+<p>After we get FSBL and BSP. Next step is create our simple “Hello World” application. There are two types of projects here:</p>
+<ul>
+<li><strong>System Project</strong>: An system project is an container for multiple applications that would run on different domains of a platform at same time. You can’t create system project directly. They are created alone with application project.</li>
+<li><strong>Application Project</strong>: An application, could be bare metal, RTOS, or Linux application.</li>
+</ul>
+<p>For our case, we need one system project which holds our “Hello World” application.</p>
+<h3 id="step-3.1.-hello-world-application">Step 3.1. Hello World Application</h3>
+<ol type="1">
+<li><p>In Vitis IDE, create a new application project.</p></li>
+<li><p>In wizard, create a new system project for this application project.</p></li>
+<li><p>Choose <em>Empty Application</em> Template. This template including a makefile and a linker script.</p></li>
+<li><p>Create an file called <strong>main.c</strong>. Add those content:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;sleep.h&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main <span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> <span class="cf">while</span><span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>     printf<span class="op">(</span><span class="st">&quot;Hello World %d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>     i<span class="op">++;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>     sleep<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a> <span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a> <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li><p>Build the application project.</p></li>
+</ol>
+<h3 id="step-3.2.-run-the-application-via-jtag">Step 3.2. Run the Application via JTAG</h3>
+<p>We can directly run the application on board, with the help of Vitis.</p>
+<ol type="1">
+<li>Open <strong>Run -&gt; Run Configuration…</strong></li>
+<li>Right click <strong>Single Application Debug</strong>, create <strong>New Configuration</strong></li>
+<li>Run the new run configuration.</li>
+<li>On Vitis’s console window. Create a <strong>Command Shell Console</strong>.</li>
+<li>Connection type is <strong>Serial Port</strong>, parameters are 115200,8,n,1.</li>
+<li>PYNQ-Z2 should printing “Hello World” every 1 second in console.</li>
+</ol>
+<h2 id="step-4.-boot-the-application">Step 4. Boot the Application</h2>
+<p>We want to boot the application on board without the help of JTAG. Before this we need to know the boot sequence of ZYNQ. In general, the boot sequence is:</p>
+<ol type="1">
+<li>Chip is power on.</li>
+<li>CortexA9_0 will start from RAM address 0. It’s BootROM, which is factory preloaded and can’t be changed.</li>
+<li>BootROM will sample the boot pins. And try to load the <em>boot image</em> on boot device, and give the control of processer to <em>boot image</em>.</li>
+<li>The first part of <em>boot image</em> is usually <strong>FSBL</strong>. FSBL is *first stage boot loader**, which is an user application, but Xilinx has provides source code for it. At most cases, we does not need to modify it.</li>
+<li><strong>FSBL</strong> will program the FPGA bitstream. And load real user application.</li>
+<li>User application take charge of CortexA9_0. If need, user application can starts up CortexA9_1.</li>
+</ol>
+<h3 id="step-4.1.-build-the-boot-image">Step 4.1. Build the Boot Image</h3>
+<p>In Vitis IDE, the boot image is automatically created under system project. It’s under <em>&lt;system project&gt;/Debug/sd_card/BOOT.BIN</em>. It’s called “SD Card” but any boot device can use it. For example, QSPI flash. If you want to build the Boot Image manually, you need a <strong>.bif</strong> file, which the template can be got from <em>&lt;system project&gt;/Debug/system.bif</em>.</p>
+<h3 id="step-4.2.-program-the-flash-or-sd-card">Step 4.2. Program the Flash (Or SD Card)</h3>
+<ol type="1">
+<li>For QSPI boot, you program the <strong>BOOT.BIN</strong> file to beginning of Flash. You can program the flash in Vitis’ <strong>Xilinx -&gt; Program Flash</strong> menu.</li>
+<li>For SD boot, copy the <strong>BOOT.BIN</strong> file to the first patriation of SD card.</li>
+<li>Power off the board. Change the boot pins to the boot device you want.</li>
+<li>Close the hardware server in Vivado and Vitis. In case the JTAG stops the processer.</li>
+<li>Power on the board.</li>
+<li>Connect the UART using parameter 115200,8,n,1.</li>
+<li>You should see the “Hello World” printing on console. Which means the application starts up correctly.</li>
+</ol>
+<h2 id="what-happened">What Happened</h2>
+<p>We just finish the bare metal ZYNQ application design flow, including both PL and PS side. We have create the FPGA design and export the <strong>.xsa</strong> file for software design. We create an simple bare metal application based on the FPGA design and successfully boot it on board. Even it’s only on first processer of dual Cortex-A9, the second processer is in idle. It’s still need extra works to make two processers work together, which is not covered by this article.</p>
+<h2 id="whats-next">What’s Next</h2>
+<p>In Part II. We will try to build and start Linux on ZYNQ.</p>
+</body>
+</html>

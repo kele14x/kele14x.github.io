@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SystemVerilog Variable and Net</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">SystemVerilog Variable and Net</h1>
+<p class="date">2020-12-29T13:21:19+08:00</p>
+</header>
+<h2 id="verilog">Verilog</h2>
+<p>During school, my EDA teacher told me to use <code>wire</code> and <code>reg</code> in my Verilog design. And for a very long time, I have the feeling the <code>wire</code> is for model a logic connection and <code>reg</code> is for register. But that’s very wrong.</p>
+<p>The <a href="https://ieeexplore.ieee.org/document/1620780">Verilog HDL LRM</a> has defined many data types, and group them into two main groups: the <em>net</em> data types and <em>variable</em> data types. <code>wire</code> is most (and almost all) used <em>net</em> type, and <code>reg</code> is most used <em>variable</em> type. LRM difference the <em>net</em> data types and <em>variable</em> data type with if it can store a value. <em>variable</em> can, but <em>net</em> can’t. So the value of <em>net</em> must be depended on other <em>variable</em>.</p>
+<p>So it’s seems natural to map <code>wire</code> with combination logic, and <code>reg</code> with real registers in hardware. It’s true that <code>wire</code> will model combination logic, but it’s no true for <code>reg</code>. In fact, depends on your Verilog code, <code>reg</code> can become combination logic, registers, or even latch.</p>
+<p>Consider that the name <code>reg</code> is very easy for people to associate it with register in real hardware. They choose a poor name.</p>
+<h2 id="systemverilog">SystemVerilog</h2>
+<p>When things comes to SystemVerilog, seems they want to fix this problem. So the <a href="https://ieeexplore.ieee.org/document/8299595">SV-LRM</a> makes a distinction between data object and its data type.</p>
+<blockquote>
+<p><strong>data object</strong>: A named entity that has a data value associated with it. Examples of data objects are nets, variables, and parameters. A data object has a data type that determines which values the data object can have.</p>
+<p><strong>data type</strong>: A set of values and a set of operations that can be performed on those values. Examples of data types are logic, real, and string. Data types can be used to declare data objects or to define user-defined data types that are constructed from other data types.</p>
+</blockquote>
+<h3 id="nets">Nets</h3>
+<p>To declare a net, you use the (simplified) syntax:</p>
+<pre class="plain"><code>&lt;net_type&gt; &lt;data_type&gt; &lt;net_identifier&gt;;</code></pre>
+<p>And, <code>wire</code> is one built-in net type. For example:</p>
+<pre class="systemverilog"><code>wire logic w;</code></pre>
+<p>SystemVerilog has many built-in data type. And the most used is <code>logic</code>. So above code will declare a data object named <code>w</code>, it a <em>net</em> with net type <code>wire</code> and data type <code>logic</code>.</p>
+<h3 id="variables">Variables</h3>
+<p>To declare a variable, you use the (simplified) syntax:</p>
+<pre class="plain"><code>var &lt;data_type&gt; &lt;variable_identifier&gt;;</code></pre>
+<p>An new keyword <code>var</code> is here to explicit declare a variable. For example:</p>
+<pre class="systemverilog"><code>var logic v; // same as var reg v;</code></pre>
+<p>will declare a data object name <code>v</code>, it’s <em>variable</em> with data type <code>logic</code>. <em>variable</em> does not have such a thing called variable type.</p>
+<p>Like verilog, <em>variable</em> can be combination logic, registers, or even latch.</p>
+<p>What about <code>reg</code>? In-fact, <code>reg</code> and <code>logic</code> is same thing. <code>reg</code> is till there for backward compatible with Verilog. But it’s not recommended for new design, since the name is confusable.</p>
+<h3 id="implicit-rules">Implicit Rules</h3>
+<p>Util now, things are quite straightforward. If <code>wire</code> is there, you know it’s a net. If you see <code>var</code>, it’s a variable. They all have data type such as <code>logic</code>, <code>reg</code>. The difference between <em>net</em> and <em>variable</em> is that <em>net</em> does not store a value.</p>
+<p>But things goes confusion when you still see <code>wire a</code> and <code>reg b</code> in SystemVerilog file… This is may because many designers are come from Verilog, and <code>var</code> or <code>logic</code> can be omitted for compatible with Verilog.</p>
+<p>So what is <code>wire a</code> and <code>reg b</code> in SystemVerilog? From LRM, <code>wire a</code> is net declaration with implicit data type <code>logic</code>. So <code>wire a</code> is equivalent to <code>wire logic a</code>.</p>
+<p>For <code>reg b</code> it’s not that simple. <code>reg r</code> is equivalent to <code>var logic r</code> for data object inside module. For port, a port can be net or variable, and default is net. So <code>reg b</code> is equivalent to <code>wire logic b</code> for port declaration.</p>
+<h3 id="example">Example</h3>
+<p>This is a simple example:</p>
+<pre class="systemverilog"><code>module variables_and_nets(only_input);
+
+// Net
+
+    input only_input;
+
+    wire only_wire;
+
+    wire logic wire_logic;
+
+    // This is specially not allowed, since Verilog developer will be unhappy
+    // wire reg wire_reg;
+
+// Variable
+
+    var only_var;
+
+    reg only_reg;
+
+    logic only_logic;
+
+    var reg var_reg;
+
+    var logic var_logic;
+
+endmodule</code></pre>
+<h3 id="recommendations">Recommendations</h3>
+<p>My recommendations are:</p>
+<ol type="1">
+<li><p>For port declaration, use explicit <code>var</code>. This makes your port have be a variable. And multi-driven is not allowed for variable, so you can easy see issue during design.</p></li>
+<li><p>Use <code>logic</code> mainly. So you will default get a variable, so you can detect multi-drive.</p></li>
+<li><p>Do not use <code>reg</code>. It’s a poor name and replaced by <code>logic</code>.</p></li>
+<li><p>If you really want net, use <code>wire</code>.</p></li>
+<li><p>Set <code>default_nettype</code> directive to <code>none</code> for all source file. It will require you explicit write <code>wire</code> when you want net. Also it will prevent you from accidentally declare a new net when you have a typo. (If not, synthesis tool usually will give a warning, but quite unremarkable).</p></li>
+</ol>
+</body>
+</html>
