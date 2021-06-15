@@ -2,7 +2,7 @@
 title: Kele's Blog
 ...
 
-- [Coins Game](./posts\12-coins-game\coins-game.html)
+- [12 Coins Game](./posts\12-coins-game\12-coins-game.html)
 
 - [8B 10B Encoding](./posts\8b-10b-encoding\8b-10b-encoding.html)
 

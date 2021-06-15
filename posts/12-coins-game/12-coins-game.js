@@ -149,7 +149,7 @@ var lut = {};
 
 lut[[]] = 1;
 
-var solve  = function (board) {
+var solve = function (board) {
 
     if (lut.hasOwnProperty(board))
         return lut[board];
