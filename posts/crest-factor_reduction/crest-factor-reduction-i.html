@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Crest Factor Reduction I</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Crest Factor Reduction I</h1>
+<p class="date">2021-03-24 14:50</p>
+</header>
+<h1 id="cfr-concept">CFR Concept</h1>
+<p>In LTE/NR telecommunications, <a href="https://en.wikipedia.org/wiki/Orthogonal_frequency-division_multiplexing">OFDM</a> is used as the method to encoding digital data to RF waveform. One of the disadvantage if OFDM is high (Peak to Average Power Ratio) PAPR. Crest Factor Reduction (CFR) is a technique used to reduce PAPR of transmitted signal so that power amplifier (PA) can operate more efficiently.</p>
+<p>To know the necessary and consideration of CFR, we need to know the typical characteristic of an RF (PA).</p>
+<h2 id="rf-power-amplifier">RF Power Amplifier</h2>
+<p><img src="images/cfr/pa-input-output.drawio.png" class="m-image m-image" alt="Power Amplifier Input vs Output" /></p>
+<p>For an ideal PA, the input and output has a linear relationship: that is, if input power of PA increased 1 dB, output power of PA will also increase by 1 dB. But ability of PA is not infinity. As the input power level increase, there will be a power level that the output of PA won't increase that much with input. That is, the output power starts to saturate. Eventually, the slope of the input vs output power becomes zero. The power level at which this happen is known as <em>saturate point</em>. The <strong>output power</strong> of saturate point is <span class="math inline"><em>P</em><sub><em>s</em><em>a</em><em>t</em><em>u</em><em>r</em><em>a</em><em>t</em><em>i</em><em>o</em><em>n</em></sub></span>.</p>
+<p>To use this PA to amplify RF signal, usually we will have some back off from saturation power (for example, 1 dB, which is called <span class="math inline"><em>P</em><sub>1<em>d</em><em>B</em></sub></span>). Below the back off level is the operation range. If more linearity is wanted, we can back off more, if you need more output power, you need back off less. Peak power of output is <span class="math inline"><em>P</em><sub><em>p</em><em>e</em><em>a</em><em>k</em></sub></span>. Average output power <span class="math inline"><em>P</em><sub><em>a</em><em>v</em><em>e</em><em>r</em><em>a</em><em>g</em><em>e</em></sub></span> can be calculated by:</p>
+<p><span class="math display"><em>P</em><sub><em>a</em><em>v</em><em>e</em><em>r</em><em>a</em><em>g</em><em>e</em></sub> = <em>P</em><sub><em>s</em><em>a</em><em>t</em><em>u</em><em>r</em><em>a</em><em>t</em><em>i</em><em>o</em><em>n</em></sub> − <em>P</em><sub><em>b</em><em>a</em><em>c</em><em>k</em><em>o</em><em>f</em><em>f</em></sub> − <em>P</em><em>A</em><em>P</em><em>R</em></span></p>
+<p>You can see that PAPR of signal affects average power of PA output. Signal with smaller PAPR can be amplified to higher power. If the output power is a fixed requirement, you can operate PA with lower saturation level (less supply voltage). In fact, efficiency of PA is a complex thing, but we can have a quick evaluation that operating at nonlinear range will be more efficient than operating at linear range. So at both case, it will be better efficient during transmit.</p>
+<h2 id="functionality-of-cfr">Functionality of CFR</h2>
+<p>We know that PAPR has impact on PA's efficiency. So CFR is introduced to reduce the PAPR of signal. But how? The easiest way to reduce PAPR of signal is to clip the <em>peak</em> of the signal. We will have a threshold, which is target PAPR we want. If we see the signal's instance power is larger than threshold, we clip the excess part. Result a PAPR reduced signal, but causes error comparing to the original signal. That's the cost of CFR. Also we need to know that for RF equipment, the Adjacent Channel Leakage Ratio (ACLR) is a key requirement. This requires your signal should be "smooth" enough so that you will not interfere your neighborhood. This is another consideration CFR should take.</p>
+<h2 id="placed-in-system">Placed in System</h2>
+<p>Usually, CFR module is placed at the position before DAC to alter the signal to transmit:</p>
+<p><img src="images/cfr/cfr-placed-in-system.drawio.png" class="m-image m-image" alt="CFR Placed in System" /></p>
+<h1 id="cfr-methods">CFR Methods</h1>
+<p>In practice, there are different CFR algorithms, such as:</p>
+<ul>
+<li>Hard Clipping</li>
+<li>Peak Cancellation</li>
+<li>Peak Windowing</li>
+<li>Noise Shaping</li>
+</ul>
+<p>I will have a brief introduction based on the complexity of each method:</p>
+<h2 id="hard-clipping">Hard Clipping</h2>
+<p><em>Hard Clipping</em> is very simple, it's the way I mentioned in <a href="#functionality-of-cfr">Functionality of CFR</a>. The clipping mathematical equation is as follows:</p>
+<p><span class="math display"><em>x</em><sub><em>c</em><em>l</em><em>i</em><em>p</em><em>p</em><em>e</em><em>d</em></sub>[<em>n</em>] = <em>c</em>[<em>n</em>] ⋅ <em>x</em>[<em>n</em>]</span><span class="math display">$$\begin{aligned}
+c[n] = \begin{cases}
+\frac{A}{|x[n]|} &amp; |x[n]| \ge A\\
+1 &amp; |x[n]| &lt; A
+\end{cases}
+\end{aligned}$$</span></p>
+<p>where <span class="math inline"><em>A</em></span> is the clipping threshold. However, in digital circuits, division and multiplication is expensive. The clipping is usually archived by a subtraction. The structure is as follows:</p>
+<p><img src="images/cfr/hard-clipping.drawio.png" class="m-image m-image" alt="Hard Clipping" /></p>
+<p>The <em>Polar Clipping</em> block will extract the part exceeds threshold and it will be subtracted from original signal with matched delay. The purpose of the delay is to compensate for all the latencies generated during the detection and extraction of the clip sequence. The main problem of this algorithm is the clipping cause some sharp corner during the point where signal go through the threshold. The sharp corner will cause some out-of-band noise and impact adjacent channel.</p>
+<p>We will not go much detail here since we will introduce the implementation in next post.</p>
+<h2 id="noise-shaping">Noise Shaping</h2>
+<p>The <strong>Noise Shaping</strong> (NS) algorithm, sometimes referred to as <strong>Peak Filtering</strong> (PF), consists of extracting the part of the input signal whose magnitude exceeds the threshold, then filtering it and finally subtracting it from a properly delayed version of the original signal itself. Compared with hard clipping, the difference is the noise shaping filter. The filter should have a better shape on adjacent channel, so the filter is designed based on the specified type of signal.</p>
+<p><img src="images/cfr/noise-shaping.drawio.png" alt="Noise Shaping CFR" /></p>
+<p>The problem of NS CFR is that after the filtering operation it self, it is possible that some peaks will be created again (the so called <strong>peak regrowth</strong> phenomenon). So cascading several stages of NS maybe necessary.</p>
+<h2 id="peak-windowing">Peak Windowing</h2>
+<p>The <strong>Peaking Windowing</strong> (PW) algorithm is based on multiplying the signal with an attenuation window rather than adding a correction to the signal. When a peak is detected in the input signal, a set of coefficients is loaded and scaled to ensure that the peaks will be attenuated to the desired level (threshold). The coefficients (the window) is multiplied to the peak using a FIR.</p>
+<p><img src="images/cfr/peak-windowing.drawio.png" alt="Peak Windowing CFR" /></p>
+<p>The advantage of the algorithm is that the window amplitude changes smoothly, then not much out-of-band emission is expected to appear. But on the other hand, the windowing method lack the knowledge about the exact frequency characteristics. This make it harder to guarantee a required specified OOB performance.</p>
+<h2 id="peak-cancellation">Peak Cancellation</h2>
+<p>The algorithm of Peak Cancellation (PC-CFR) is simple. When a peak is detected in the input signal, it does not filter the clip error sequence. PC-CFR only isolates a single input element sample among those identified as peaks. It cancels them individually by subtracting properly shaped cancelling pulses from the signal, one for each peak. The pules are designed to have the same spectrum as the signal.</p>
+<p><img src="images/cfr/pc-cfr.drawio.png" class="m-image m-image" alt="image" /></p>
+<p>It aims to strike a balance between the out-of-band emission and in-band waveform quality when compressing the signal to a target PAPR.</p>
+<h1 id="comparing-of-methods">Comparing of Methods</h1>
+<p>The system-level performance of Peak Cancellation (PC-CFR) is shown to be better than other methods with save overall cost. This is the compare result of different CFR Method from Xilinx:</p>
+<p><img src="images/cfr/papr-reduction-vs-evm-vs-method.png" class="m-image m-image" width="325" alt="PAPR Reduction vs EVM vs Method" /></p>
+<p>In next post of this series, I'll introduce more detailed implementation of a real CFR module.</p>
+</body>
+</html>

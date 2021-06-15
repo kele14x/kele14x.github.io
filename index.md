@@ -10,13 +10,19 @@ title: Kele's Blog
 
 - [Cmult In Fpga](./posts\cmult-fpga\cmult-in-fpga.html)
 
+- [Crest Factor Reduction I](./posts\crest-factor_reduction\crest-factor-reduction-i.html)
+
 - [Dds Fpga](./posts\dds-fpga\dds-fpga.html)
+
+- [Draw.Io](./posts\draw-io\draw.io.html)
 
 - [Fifos In Vivado](./posts\fifo-fpga\fifos-in-vivado.html)
 
 - [Fir In Fpga 1](./posts\fir-fpga\fir-in-fpga-1.html)
 
 - [Using Google Domains](./posts\google-domain\using-google-domains.html)
+
+- [New Decolation On Blog](./posts\new-decolation-on-blog\new-decolation-on-blog.html)
 
 - [Rounding In Fpga](./posts\rounding-fpga\rounding-in-fpga.html)
 
