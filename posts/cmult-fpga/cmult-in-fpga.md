@@ -1,15 +1,11 @@
 ---
 title: FPGA 中复数乘法器的设计
 date: 2017-11-08
-categories: [FPGA]
-tags: [FPGA, DSP, Complex Multiplication]
 ---
 
 复数乘法是一个常见的运算，尽管 Vivado/SysGen 中自带复数乘法的器的 IP，但仍然让我们来看看如何从头设计一个——这有助于我们更加了解 Xilinx FPGA 并且锻炼自己的设计能力……好吧我不吹了，有 IP 谁想自己写。但是最近我的 SysGen 工程仿真时只要有 Xilinx 的复乘 IP 就报错，明明稍早些的时候还是好好的。
 
 Debug 了半天一无所获，只能重新造个轮子了。
-
-<!--more-->
 
 复数乘法可以写成：
 
@@ -21,7 +17,7 @@ I + Qj = (a + bj) * (i + qj)
 
 其中 `I,Q,a,b,i,q` 都是实数，`j` 是虚数单位。因为 `(a - b) * q` 的结果可以重复使用，因此这样计算复乘仅需要 3 次乘法。这也被称为 3 乘法器复乘结构。不卖关子，我们直接给出一个 Xilinx FPGA 中的 pipeline 的实现方案：
 
-![cmult-fpga-1](/image/cmult-fpga-1.png)
+![cmult-fpga-1](cmult-fpga-1.png)
 
 从左侧开始，数据向右向上流动。DSP-1 计算出 `(a - b) * q`，然后将结果传给 DSP-2 和 DSP-3。 DSP-2 最终完成 `I` 的计算，DSP-3 完成 `Q` 的计算。注意 DSP48 的第一级加法器也可以做减法（D-A 模式），无需额外的资源来做负号运算。RND 是一个常数，用作输出的修约。如果输出使用全位宽，那么 RND 为 0。
 
