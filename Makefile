@@ -1,6 +1,6 @@
 .PHONY: all docs clean
 
-all: docs
+all: clean docs
 
 docs:
 	python build.py
