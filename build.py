@@ -42,7 +42,8 @@ def build(source: str, target: str) -> List[Tuple]:
             if not os.path.lexists(p):
                 os.mkdir(os.path.join(tardir, dirname))
             elif not os.path.isdir(p):
-                raise FileExistsError(f'{p} already exists but is not directory')
+                raise FileExistsError(f'{p} already exists but is not a '
+                                      'directory')
 
         # Copy or convert file
         for filename in filenames:
