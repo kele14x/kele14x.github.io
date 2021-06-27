@@ -23,10 +23,10 @@ def generate_index(index: List[Tuple], target: str):
         f.write(
             '---\n'
             'title: Kele\'s Blog\n'
-            '---\n\n'
+            '---\n'
         )
-        for title, path in index:
-            f.write(f'- [{title}](./{path})\n\n')
+        for title, _, url in index:
+            f.write(f'\n- [{title}](./{url})\n')
 
 
 def build(source: str, target: str) -> List[Tuple]:
@@ -54,8 +54,9 @@ def build(source: str, target: str) -> List[Tuple]:
                 # Load frontmatter
                 fm = frontmatter.load(s)
                 title = fm['title']
+                date = fm['date']
                 url = os.path.relpath(t, target).replace('\\', '/')
-                posts.append((title, url))
+                posts.append((title, date, url))
                 # Convert file
                 print(f'Convert file {s} -> {t}')
                 convert_file(s, t)
@@ -64,7 +65,7 @@ def build(source: str, target: str) -> List[Tuple]:
                 print(f'Copy file {s} -> {t}')
                 shutil.copyfile(s, t)
 
-    return posts
+    return sorted(posts, key=lambda x: x[2], reverse=True)
 
 
 if __name__ == '__main__':
