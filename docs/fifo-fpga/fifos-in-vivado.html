@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2020-01-09" />
   <title>Vivado 种实现 FIFO 的 4 种方法</title>
   <style>
     html {
       line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
+      font-family: Source Han Serif SC;
+      font-size: 12pt;
       color: #1a1a1a;
       background-color: #fdfdfd;
     }
@@ -142,7 +143,6 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -151,7 +151,7 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">Vivado 种实现 FIFO 的 4 种方法</h1>
-<p class="date">2020-01-09T14:01:23+08:00</p>
+<p class="date">2020-01-09</p>
 </header>
 <blockquote>
 <p>…孔乙己自己知道不能和他们谈天，便只好向孩子说话。有一回对我说道，“你读过书么？”我略略点一点头。他说，“读过书，……我便考你一考。茴香豆的茴字，怎样写的？”我想，讨饭一样的人，也配考我么？便回过脸去，不再理会。孔乙己等了许久，很恳切的说道，“不能写罢？……我教给你，记着！这些字应该记着。将来做掌柜的时候，写账要用。”我暗想我和掌柜的等级还很远呢，而且我们掌柜也从不将茴香豆上账；又好笑，又不耐烦，懒懒的答他道，“谁要你教，不是草头底下一个来回的回字么？”孔乙己显出极高兴的样子，将两个指头的长指甲敲着柜台，点头说，“对呀对呀！……<strong>Vivado 种实现 FIFO 的方法有 4 种，你知道么？</strong>”我愈不耐烦了，努着嘴走远。孔乙己刚用指甲蘸了酒，想在柜上写字，见我毫不热心，便又叹一口气，显出极惋惜的样子。</p>

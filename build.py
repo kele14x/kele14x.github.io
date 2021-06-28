@@ -10,7 +10,7 @@ import frontmatter
 
 def convert_file(source: str, target: str):
     """Convert file to HTML using pandoc."""
-    cmd = f'pandoc --eol=lf --standalone -o {target} {source}'
+    cmd = f'pandoc -d pandoc.yaml -o {target} {source}'
     print(f'Run command: {cmd}')
     try:
         subprocess.run(cmd)
