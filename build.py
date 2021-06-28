@@ -1,14 +1,16 @@
 #!/usr/bin/python
 import os
-import subprocess
 import shutil
-import frontmatter
+import subprocess
+from datetime import datetime
 from typing import List, Tuple
+
+import frontmatter
 
 
 def convert_file(source: str, target: str):
     """Convert file to HTML using pandoc."""
-    cmd = f'pandoc --standalone -o {target} {source}'
+    cmd = f'pandoc --eol=lf --standalone -o {target} {source}'
     print(f'Run command: {cmd}')
     try:
         subprocess.run(cmd)
@@ -55,6 +57,8 @@ def build(source: str, target: str) -> List[Tuple]:
                 fm = frontmatter.load(s)
                 title = fm['title']
                 date = fm['date']
+                if isinstance(date, datetime):
+                    date = date.date()
                 url = os.path.relpath(t, target).replace('\\', '/')
                 posts.append((title, date, url))
                 # Convert file
@@ -65,7 +69,7 @@ def build(source: str, target: str) -> List[Tuple]:
                 print(f'Copy file {s} -> {t}')
                 shutil.copyfile(s, t)
 
-    return sorted(posts, key=lambda x: x[2], reverse=True)
+    return sorted(posts, key=lambda x: x[1], reverse=True)
 
 
 if __name__ == '__main__':
