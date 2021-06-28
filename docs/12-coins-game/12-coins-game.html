@@ -9,8 +9,8 @@
   <style>
     html {
       line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
+      font-family: Source Han Serif SC;
+      font-size: 12pt;
       color: #1a1a1a;
       background-color: #fdfdfd;
     }
@@ -206,8 +206,23 @@
     code span.va { color: #19177c; } /* Variable */
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+   var mathElements = document.getElementsByClassName("math");
+   var macros = [];
+   for (var i = 0; i < mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == "SPAN") {
+     katex.render(texText.data, mathElements[i], {
+      displayMode: mathElements[i].classList.contains('display'),
+      throwOnError: false,
+      macros: macros,
+      fleqn: false
+     });
+  }}});
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -254,16 +269,16 @@
 <li>2: 胜负尚待以后的回合才能见分晓</li>
 </ul>
 <p>也就是说每个棋局的状态，都具是上述类型之一，分别编号为 0、1、2。为了证明不存在类型 2，我们先假定存在它。</p>
-<p>首先将棋局的状态用数组 <span class="math inline"><em>s</em> = [<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,<em>a</em><sub>3</sub>,...,<em>a</em><sub>12</sub>]</span> 表示。</p>
-<p><span class="math display"><em>a</em><sub><em>i</em></sub> = 0, 1; <em>i</em> = 1, 2, 3, ..., 12</span></p>
-<p><span class="math inline"><em>a</em><sub><em>i</em></sub></span> 等于 0 表示对应位置的硬币已经被取走，等于 1 表示未被取走。在游戏刚开始时，<span class="math inline"><em>s</em><sub><em>s</em><em>t</em><em>a</em><em>r</em><em>t</em></sub> = [1,1,1,1,1,1,1,1,1,1,1,1]</span>，结束时 <span class="math inline"><em>s</em><sub><em>e</em><em>n</em><em>d</em></sub> = [0,0,0,0,0,0,0,0,0,0,0,0]</span>。显然存在一个函数 <span class="math inline"><em>f</em></span>，对于任意的棋局状态<span class="math inline"><em>s</em></span>，<span class="math inline"><em>f</em>(<em>s</em>)</span> 等于 <span class="math inline"><em>s</em></span> 的类型。即函数 <span class="math inline"><em>f</em></span> 能够求出棋局状态的类型：</p>
-<p><span class="math display"><em>f</em>(<em>s</em>) = 0, 1, 2</span></p>
-<p>0,1,2 的含义已经解释过了。对于任意非全零的棋局状态 <span class="math inline"><em>s</em></span>，都存在一个合法的下个棋局状态的集合。设函数 <span class="math inline"><em>g</em></span> 能够求出它：</p>
-<p><span class="math display"><em>g</em>(<em>s</em>) = {<em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ..., <em>s</em>′<sub><em>n</em></sub>}</span></p>
-<p>如果 <span class="math inline"><em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ..., <em>s</em>′<sub><em>n</em></sub></span> 中存在一个或多个元素满足 <span class="math inline"><em>f</em>(<em>s</em>′<sub><em>k</em></sub>) = 0</span>，那么 <span class="math inline"><em>f</em>(<em>s</em>) = 1</span>（即，你采用某种取法，你的对手是必输的，自然你是必胜的）；如果 <span class="math inline"><em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ...<em>s</em>′<sub><em>n</em></sub></span> 中的元素都满足 <span class="math inline"><em>f</em>(<em>s</em>′<sub><em>k</em></sub>) = 1</span>，那么 <span class="math inline"><em>f</em>(<em>s</em>) = 0</span>（即无论你采用任何一种取法，你的对手都是必胜的，自然你是必输的）；而其它的情况，<span class="math inline"><em>f</em>(<em>s</em>) = 2</span>。</p>
-<p>假设存在 <span class="math inline"><em>s</em><sub>0</sub></span>，使得 <span class="math inline"><em>f</em>(<em>s</em><sub>0</sub>) = 2</span>，并且 <span class="math inline"><em>g</em>(<em>s</em><sub>0</sub>) = {<em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ..., <em>s</em>′<sub><em>n</em></sub>}</span>。显然，<span class="math inline"><em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ...<em>s</em>′<sub><em>n</em></sub></span> 中不可能存在 <span class="math inline"><em>s</em>′<sub><em>k</em></sub></span> 使得 <span class="math inline"><em>f</em>(<em>s</em>′<sub><em>k</em></sub>) = 0</span>。同样的，<span class="math inline"><em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ..., <em>s</em>′<sub><em>n</em></sub></span> 不可能都满足 <span class="math inline"><em>f</em>(<em>s</em>′<sub><em>k</em></sub>) = 1</span>。这样，<span class="math inline"><em>s</em>′<sub>1</sub>, <em>s</em>′<sub>2</sub>, ..., <em>s</em>′<sub><em>n</em></sub></span> 中必然存在 <span class="math inline"><em>s</em>′<sub><em>k</em></sub></span>，满足 <span class="math inline"><em>f</em>(<em>s</em>′<sub><em>k</em></sub>) = 2</span>。</p>
+<p>首先将棋局的状态用数组 <span class="math inline">s = [a_1, a_2, a_3, ... , a_{12}]</span> 表示。</p>
+<p><span class="math display">a_i=0,1; i=1, 2, 3, ... , 12</span></p>
+<p><span class="math inline">a_i</span> 等于 0 表示对应位置的硬币已经被取走，等于 1 表示未被取走。在游戏刚开始时，<span class="math inline">s_{start}=[1,1,1,1,1,1,1,1,1,1,1,1]</span>，结束时 <span class="math inline">s_{end}=[0,0,0,0,0,0,0,0,0,0,0,0]</span>。显然存在一个函数 <span class="math inline">f</span>，对于任意的棋局状态<span class="math inline">s</span>，<span class="math inline">f(s)</span> 等于 <span class="math inline">s</span> 的类型。即函数 <span class="math inline">f</span> 能够求出棋局状态的类型：</p>
+<p><span class="math display">f(s)=0,1,2</span></p>
+<p>0,1,2 的含义已经解释过了。对于任意非全零的棋局状态 <span class="math inline">s</span>，都存在一个合法的下个棋局状态的集合。设函数 <span class="math inline">g</span> 能够求出它：</p>
+<p><span class="math display">g(s)=\{s&#39;_1, s&#39;_2, ..., s&#39;_n\}</span></p>
+<p>如果 <span class="math inline">s&#39;_1, s&#39;_2, ..., s&#39;_n</span> 中存在一个或多个元素满足 <span class="math inline">f(s&#39;_k)=0</span>，那么 <span class="math inline">f(s)=1</span>（即，你采用某种取法，你的对手是必输的，自然你是必胜的）；如果 <span class="math inline">s&#39;_1, s&#39;_2, ...s&#39;_n</span> 中的元素都满足 <span class="math inline">f(s&#39;_k)=1</span>，那么 <span class="math inline">f(s)=0</span>（即无论你采用任何一种取法，你的对手都是必胜的，自然你是必输的）；而其它的情况，<span class="math inline">f(s)=2</span>。</p>
+<p>假设存在 <span class="math inline">s_0</span>，使得 <span class="math inline">f(s_0)=2</span>，并且 <span class="math inline">g(s_0)=\{s&#39;_1, s&#39;_2, ..., s&#39;_n\}</span>。显然，<span class="math inline">s&#39;_1, s&#39;_2, ...s&#39;_n</span> 中不可能存在 <span class="math inline">s&#39;_k</span> 使得 <span class="math inline">f(s&#39;_k)=0</span>。同样的，<span class="math inline">s&#39;_1, s&#39;_2, ..., s&#39;_n</span> 不可能都满足 <span class="math inline">f(s&#39;_k)=1</span>。这样，<span class="math inline">s&#39;_1, s&#39;_2, ..., s&#39;_n</span> 中必然存在 <span class="math inline">s&#39;_k</span>，满足 <span class="math inline">f(s&#39;_k)=2</span>。</p>
 <p>上面得出的结论的意思是，如果某个棋局状态的类型是 2，那么它的某个合法的下一个状态也肯定是类型 2——也就是说，游戏双方采用某种取硬币的方法，永远都不会分出胜负——这显然是违背常理的，这个游戏只有有限的状态，有限的步数，一定会分出胜负。</p>
-<p>借助于计算机程序，我们只需实现函数 <span class="math inline"><em>f</em>, <em>g</em></span>，就能迭代出 <span class="math inline"><em>f</em>(<em>s</em><sub><em>s</em><em>t</em><em>a</em><em>r</em><em>t</em></sub>)</span>。<span class="math inline"><em>f</em></span> 大概长这样：</p>
+<p>借助于计算机程序，我们只需实现函数 <span class="math inline">f, g</span>，就能迭代出 <span class="math inline">f(s_{start})</span>。<span class="math inline">f</span> 大概长这样：</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">f</span>(s) {</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (s <span class="op">==</span> [<span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span>])</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
@@ -276,7 +291,7 @@
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>那么 <span class="math inline"><em>f</em>([1,1,1,1,1,1,1,1,1,1,1,1])</span> 的值是多少呢？在实际编程之前，还需要注意到我们可以用另一种方式表示棋局的类型，即 12 个硬币分成几组，每组几个。例如<span class="math inline"><em>s</em> = [12]</span>表示游戏刚开始的状态，<span class="math inline"><em>s</em> = [2,9]</span> 表示有人取走了 1 枚硬币（不用具体在意是哪枚）而把剩下的 11 个硬币分成了两组，一组有 2 个相邻，一组有 9 个相邻。</p>
+<p>那么 <span class="math inline">f([1,1,1,1,1,1,1,1,1,1,1,1])</span> 的值是多少呢？在实际编程之前，还需要注意到我们可以用另一种方式表示棋局的类型，即 12 个硬币分成几组，每组几个。例如<span class="math inline">s = [12]</span>表示游戏刚开始的状态，<span class="math inline">s=[2,9]</span> 表示有人取走了 1 枚硬币（不用具体在意是哪枚）而把剩下的 11 个硬币分成了两组，一组有 2 个相邻，一组有 9 个相邻。</p>
 <p>我试着实现了这个程序，你可以在这个页面按 <strong>F12</strong> 打开浏览器的开发者工具，找到 js console 试试：</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>([<span class="dv">12</span>])</span></code></pre></div>
 <p>好吧，室友在多年前虐我的问题终于算是想明白了。</p>

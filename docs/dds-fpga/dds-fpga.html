@@ -9,8 +9,8 @@
   <style>
     html {
       line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
+      font-family: Source Han Serif SC;
+      font-size: 12pt;
       color: #1a1a1a;
       background-color: #fdfdfd;
     }
@@ -143,8 +143,23 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+   var mathElements = document.getElementsByClassName("math");
+   var macros = [];
+   for (var i = 0; i < mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == "SPAN") {
+     katex.render(texText.data, mathElements[i], {
+      displayMode: mathElements[i].classList.contains('display'),
+      throwOnError: false,
+      macros: macros,
+      fleqn: false
+     });
+  }}});
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -158,37 +173,37 @@
 <!--more-->
 <h2 id="基础">基础</h2>
 <p>简单来说，DDS 完成这样的运算：</p>
-<p><span class="math display"><em>y</em> = sin (<em>Θ</em>(<em>n</em>))</span></p>
-<p>其中 <span class="math inline"><em>y</em></span> 是 DDS 模块的输出；<span class="math inline"><em>n</em></span> 为整数，是现在时刻的编号；<span class="math inline"><em>Θ</em>(<em>n</em>)</span> 是期望输出曲线的相位。</p>
-<p>由于在 FPGA 中，<span class="math inline"><em>Θ</em>(<em>n</em>)</span> 和 <span class="math inline"><em>y</em></span> 都需要量化，而且一般采用定点实现。这就引出了 DDS 中的两个硬件参数：</p>
+<p><span class="math display">y = \sin({\Theta(n)})</span></p>
+<p>其中 <span class="math inline">y</span> 是 DDS 模块的输出；<span class="math inline">n</span> 为整数，是现在时刻的编号；<span class="math inline">\Theta(n)</span> 是期望输出曲线的相位。</p>
+<p>由于在 FPGA 中，<span class="math inline">\Theta(n)</span> 和 <span class="math inline">y</span> 都需要量化，而且一般采用定点实现。这就引出了 DDS 中的两个硬件参数：</p>
 <ul>
-<li>相位位宽（Phase Width）：<span class="math inline"><em>B</em><sub><em>Θ</em>(<em>n</em>)</sub></span></li>
-<li>输出位宽（Output Width）：<span class="math inline"><em>B</em><sub><em>y</em></sub></span></li>
+<li>相位位宽（Phase Width）：<span class="math inline">B_{\Theta(n)}</span></li>
+<li>输出位宽（Output Width）：<span class="math inline">B_y</span></li>
 </ul>
-<p>一般来说有 <span class="math inline"><em>B</em><sub><em>y</em></sub> ≥ <em>B</em><sub><em>Θ</em>(<em>n</em>)</sub></span>，因为如果输出位宽比相位位宽还小的话，很多不同的相位会算出相同的结果，也就是计算中有大量的浪费。</p>
+<p>一般来说有 <span class="math inline">B_y \geq B_{\Theta(n)}</span>，因为如果输出位宽比相位位宽还小的话，很多不同的相位会算出相同的结果，也就是计算中有大量的浪费。</p>
 <p>考虑量化之后的 DDS 公式要写成：</p>
-<p><span class="math display">$$y = \sin(2\pi\frac{\Theta(n)}{N})$$</span></p>
-<p>其中 <span class="math inline"><em>N</em> = 2<sup><em>B</em><sub><em>Θ</em>(<em>n</em>)</sub></sup></span>。这两个硬件参数会影响 DDS 的两个主要性能指标：</p>
+<p><span class="math display">y = \sin(2\pi\frac{\Theta(n)}{N})</span></p>
+<p>其中 <span class="math inline">N = 2^{B_{\Theta(n)}}</span>。这两个硬件参数会影响 DDS 的两个主要性能指标：</p>
 <ul>
-<li>频率精度（Frequency Resolution）：<span class="math inline"><em>Δ</em><em>f</em></span></li>
+<li>频率精度（Frequency Resolution）：<span class="math inline">\Delta{f}</span></li>
 <li>无杂散动态范围（Spurious Free Dynamic Range）：SFDR</li>
 </ul>
 <p>频率精度指 DDS 输出频率能够调整的最小步进，由相位位宽决定:</p>
-<p><span class="math display">$$\Delta{f} = \frac{f_s}{N}$$</span></p>
-<p>其中 <span class="math inline"><em>f</em><sub><em>s</em></sub></span> 是 DDS 对正弦曲线的采样率。例如 <span class="math inline"><em>f</em><sub><em>s</em></sub> = 100<em>M</em><em>H</em><em>z</em></span>、<span class="math inline"><em>B</em><sub><em>Θ</em>(<em>n</em>)</sub> = 10<em>b</em><em>i</em><em>t</em><em>s</em></span> 时有：</p>
-<p><span class="math display"><em>Δ</em><em>f</em> ≈ 100<em>k</em><em>H</em><em>z</em></span></p>
+<p><span class="math display">\Delta{f} = \frac{f_s}{N}</span></p>
+<p>其中 <span class="math inline">f_s</span> 是 DDS 对正弦曲线的采样率。例如 <span class="math inline">f_s = 100 MHz</span>、<span class="math inline">B_{\Theta(n)} = 10 bits</span> 时有：</p>
+<p><span class="math display">\Delta{f} \approx 100 kHz</span></p>
 <p>SFDR 反映输出信号的频谱纯度，由输出位宽决定，Xilinx 给出了一个近似的计算公式：</p>
-<p><span class="math display"><em>S</em><em>F</em><em>D</em><em>R</em> = 6 × <em>B</em><sub><em>y</em></sub>[<em>d</em><em>B</em>]</span></p>
-<p><span class="math inline"><em>B</em><sub><em>y</em></sub> = 16<em>b</em><em>i</em><em>t</em><em>s</em></span> 时，有 <span class="math inline"><em>S</em><em>F</em><em>D</em><em>R</em> = 96<em>d</em><em>B</em></span>。可以看到在上述配置下，SFDR 参数已经很不错了，但是频率精度却有些低。增加频率精度的方法是提高相位位宽，但是这会增加 <span class="math inline"><em>s</em><em>i</em><em>n</em>()</span> 函数计算时的复杂度。特别是采用查找表算法时，查找表体积随相位位宽指数增长。</p>
+<p><span class="math display">SFDR = 6 \times B_y [dB]</span></p>
+<p><span class="math inline">B_y = 16 bits</span> 时，有 <span class="math inline">SFDR = 96 dB</span>。可以看到在上述配置下，SFDR 参数已经很不错了，但是频率精度却有些低。增加频率精度的方法是提高相位位宽，但是这会增加 <span class="math inline">sin()</span> 函数计算时的复杂度。特别是采用查找表算法时，查找表体积随相位位宽指数增长。</p>
 <p>一个折中的方法是相位位宽较高，但是真正计算正弦曲线时，仍然采用较低的位宽来计算，即截位后计算。这种方法提高到了频率精度，但是又带来了新的问题——计算时对相位量进行了截位，从而出现了相位误差。相位误差会造成输出波形的失真，表现为杂散（spur）。</p>
 <figure>
 <img src="/image/dds-spur.png" alt="相位误差造成的杂散" /><figcaption aria-hidden="true">相位误差造成的杂散</figcaption>
 </figure>
-<p>如上图所示，DDS 输出频率设定为 <span class="math inline">0.1<em>f</em><sub><em>s</em></sub></span>。红色为相位宽度和计算位宽一致（10 bits）时 DDS 的输出。蓝色为相位宽度为 16 bits、计算位宽为 10 bits 时 DDS 的输出。可以看到红色曲线的 SFDR 优于 100 dB，而蓝色为 60 dB。</p>
-<p>需要说明的是，杂散是由于相位累加和计算位宽的不一致，即相位误差误差造成的。采用一致的累加位宽和计算位宽就能够避免这个问题。即便采用不一样的位宽，对于那些刚好“凑整”的输出频率，例如 <span class="math inline"><em>f</em><sub><em>s</em></sub>/4</span>、<span class="math inline"><em>f</em><sub><em>s</em></sub>/8</span>，也不会产生这个问题。即杂散的情况和输出频率有关。</p>
+<p>如上图所示，DDS 输出频率设定为 <span class="math inline">0.1f_s</span>。红色为相位宽度和计算位宽一致（10 bits）时 DDS 的输出。蓝色为相位宽度为 16 bits、计算位宽为 10 bits 时 DDS 的输出。可以看到红色曲线的 SFDR 优于 100 dB，而蓝色为 60 dB。</p>
+<p>需要说明的是，杂散是由于相位累加和计算位宽的不一致，即相位误差误差造成的。采用一致的累加位宽和计算位宽就能够避免这个问题。即便采用不一样的位宽，对于那些刚好“凑整”的输出频率，例如 <span class="math inline">f_s/4</span>、<span class="math inline">f_s/8</span>，也不会产生这个问题。即杂散的情况和输出频率有关。</p>
 <p>Xilinx 给出了位宽不一致情况下 SFDR 的估算公式：</p>
-<p><span class="math display"><em>S</em><em>F</em><em>D</em><em>R</em> = 6 × <em>B</em><sub><em>Θ</em>(<em>n</em>)</sub></span></p>
-<p>其中 <span class="math inline"><em>B</em><sub><em>Θ</em>(<em>n</em>)</sub></span> 是用于计算的相位位宽。这时能看到一个有趣的结果：SFDR 同样是由相位位宽决定的，而输出位宽只要满足 <span class="math inline"><em>B</em><sub><em>y</em></sub> ≥ <em>B</em><sub><em>Θ</em>(<em>n</em>)</sub></span> 就足够了，再多也不是很有用。</p>
+<p><span class="math display">SFDR = 6 \times B_{\Theta(n)}</span></p>
+<p>其中 <span class="math inline">B_{\Theta(n)}</span> 是用于计算的相位位宽。这时能看到一个有趣的结果：SFDR 同样是由相位位宽决定的，而输出位宽只要满足 <span class="math inline">B_y \geq B_{\Theta(n)}</span> 就足够了，再多也不是很有用。</p>
 <h2 id="改进的算法">改进的算法</h2>
 <p>我们希望在频率精度足够的同时改进 SFDR。常用的方法包括两个：相位抖动和插值。</p>
 <h3 id="相位抖动">相位抖动</h3>
@@ -223,7 +238,7 @@
 <p>蓝色没有采用抖动；基佬紫为抖动之后的结果。可以看到 SFDR 大概有 71 dB，改善了 11 dB。</p>
 <h2 id="其它一些细节">其它一些细节</h2>
 <p>利用 Xilinx FPGA 中 BRAM 有两个接口的特性，可以同时实现 Sin 和 Cos 查找表而不用多做一个冗余的表，因为：</p>
-<p><span class="math display">$$cos(x) = sin(x+\frac{\pi}{2})$$</span></p>
+<p><span class="math display">cos(x) = sin(x+\frac{\pi}{2})</span></p>
 <p>当查找表位宽为 10 bits，输出位宽为 16 bits 时，完整的正弦曲线的比特数为 16384 bits，这刚好是 Xilinx FPGA 中 BRAM 最小单元的大小（18k BRAM）。当查找表位宽为 12 bits 时，可以利用正弦曲线的对称性缩小 3/4 的查找表，但需要额外的逻辑资源来进行数学“负数”运算，以及处理零点的问题。</p>
 <h2 id="参考">参考</h2>
 <ul>

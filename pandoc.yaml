@@ -1,0 +1,10 @@
+standalone: true
+
+variables:
+  mainfont: "Source Han Serif SC"
+  fontsize: 12pt
+
+eol: lf
+
+html-math-method:
+  method: katex

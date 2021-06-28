@@ -9,8 +9,8 @@
   <style>
     html {
       line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
+      font-family: Source Han Serif SC;
+      font-size: 12pt;
       color: #1a1a1a;
       background-color: #fdfdfd;
     }
@@ -206,8 +206,23 @@
     code span.va { color: #19177c; } /* Variable */
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+   var mathElements = document.getElementsByClassName("math");
+   var macros = [];
+   for (var i = 0; i < mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == "SPAN") {
+     katex.render(texText.data, mathElements[i], {
+      displayMode: mathElements[i].classList.contains('display'),
+      throwOnError: false,
+      macros: macros,
+      fleqn: false
+     });
+  }}});
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -226,8 +241,8 @@
 </figure>
 <p>实际写过 FPGA 大概就明白，这张图是比较中肯的，很多高速运算是需要依靠 FPGA 的（比如比特币矿机）。但是 FPGA 最常用的设计语言，Verilog 和 VHDL，就像上古时代的汇编一样。高效，控制力强，但是超麻烦。</p>
 <p>一次，我需要在 FPGA 内写一个 2D 线性插值的模块，算法很简单：</p>
-<p><span class="math display">$$ y = c_0 + (c_1-c_0)\frac{x_1}{S} + (c_2-c_0)\frac{x_2}{S} + (c_3-c_2-c_1+c_0)\frac{x_1 x_2}{S^2} $$</span></p>
-<p>其中 <span class="math inline"><em>c</em><sub><em>i</em></sub>, <em>x</em><sub><em>j</em></sub></span> 都是输入，<span class="math inline"><em>S</em></span> 是常数。计算上面的公式需要若干加法器和乘法器（除法用位移来代替）。按照常规的思路，我开始规划先算哪几个加法或是乘法，然后算哪几个运算。其中需要注意加法器和乘法器的延迟来对其数据，同时还要考虑每个中间步骤的位宽，注释其意义。折腾了相当久，最后发现这模块我居然写出来了上百行。</p>
+<p><span class="math display"> y = c_0 + (c_1-c_0)\frac{x_1}{S} + (c_2-c_0)\frac{x_2}{S} + (c_3-c_2-c_1+c_0)\frac{x_1 x_2}{S^2} </span></p>
+<p>其中 <span class="math inline">c_i,x_j</span> 都是输入，<span class="math inline">S</span> 是常数。计算上面的公式需要若干加法器和乘法器（除法用位移来代替）。按照常规的思路，我开始规划先算哪几个加法或是乘法，然后算哪几个运算。其中需要注意加法器和乘法器的延迟来对其数据，同时还要考虑每个中间步骤的位宽，注释其意义。折腾了相当久，最后发现这模块我居然写出来了上百行。</p>
 <p>第二天再看自己的代码，被恶心到的同时，我决定尝试下 HLS。上手花了一些时间，但总体效果还是可以。上述 2D 插值模块的 C 代码不过几行，编译不过几秒。如果以后需要修改位宽什么的，也仅需简单修改几个定义:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// file: interp2d.c</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;ap_cint.h&gt;</span></span>
