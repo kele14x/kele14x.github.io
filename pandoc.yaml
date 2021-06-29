@@ -1,10 +1,13 @@
 standalone: true
 
 variables:
-  mainfont: "Source Han Serif SC"
+  mainfont: "'Source Han Serif SC', 'Noto Serif SC', Serif"
   fontsize: 12pt
 
 eol: lf
 
 html-math-method:
   method: katex
+
+filters:
+- link-to-html.lua
