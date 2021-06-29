@@ -6,4 +6,4 @@ I write content of this blog in [Markdown](https://daringfireball.net/projects/m
 
 Domain [kele14.me](https://kele14.me) registered on [Google Domains](https://domains.google/) and static content hosted on [GitHub](https://github.com/kele14x/kele14x.github.io).
 
-You can find on [twitter](https://twitter.com/kele_plus).
+You can find me on [twitter](https://twitter.com/kele_plus).
