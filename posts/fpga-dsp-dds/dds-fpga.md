@@ -5,8 +5,6 @@ date: 2017-07-11
 
 DDS（Direct Digital Synthesizer，直接频率合成器），或者叫 NCO（Numerically Controlled Oscillator，数控振荡器）是数字信号处理中的一个非常重要的组件。一般来说，DDS 利用查找表法产生一个数字的正弦曲线。其它的算法包括 CORDIC、泰勒展开等。典型的应用包括 DUC/DDC。
 
-<!--more-->
-
 ## 基础
 
 简单来说，DDS 完成这样的运算：
@@ -47,7 +45,7 @@ $B_y = 16 bits$ 时，有 $SFDR = 96 dB$。可以看到在上述配置下，SFDR
 
 一个折中的方法是相位位宽较高，但是真正计算正弦曲线时，仍然采用较低的位宽来计算，即截位后计算。这种方法提高到了频率精度，但是又带来了新的问题——计算时对相位量进行了截位，从而出现了相位误差。相位误差会造成输出波形的失真，表现为杂散（spur）。
 
-![相位误差造成的杂散](/image/dds-spur.png)
+![相位误差造成的杂散](dds-spur.png)
 
 如上图所示，DDS 输出频率设定为 $0.1f_s$。红色为相位宽度和计算位宽一致（10 bits）时 DDS 的输出。蓝色为相位宽度为 16 bits、计算位宽为 10 bits 时 DDS 的输出。可以看到红色曲线的 SFDR 优于 100 dB，而蓝色为 60 dB。
 
@@ -71,7 +69,7 @@ $$SFDR = 6 \times B_{\Theta(n)}$$
 
 具体的可以这样计算：在相位值截位之前，为其加上一个小的随机量（白噪声）。随着这个随机量期望的增大，DDS 输出信号频谱的底噪会被抬高，但是杂散却会降低。这是因为由于随机的舍去舍入，杂散的能量“平均”了。如果控制得当，杂散可以刚好压制到和低噪一样高，就能得到最好的 SFDR 性能。
 
-![相位抖动](/image/dds-dither.png)
+![相位抖动](dds-dither.png)
 
 同样的，我们直接说结论，Xilinx 告诉我们相位抖动带来的好处大概是 12 dB，约等于 2 位相位位宽。如果是查找表实现的 DDS，在同样的 SFDR 性能下，相比没有相位抖动处理的 DDS，可以节约 3/4 的查找表体积。上图是 Xilinx 的仿真结果，采用了 12 bits 相位位宽。没有相位抖动时理论 SFDR 是红线（-72 dB），而有了相位抖动之后能够达到绿线（-84 dB）。注意到 Xilinx 采用了多个输出频率来测试，这时因为杂散是和输出频率相关的。
 
@@ -87,19 +85,19 @@ $$SFDR = 6 \times B_{\Theta(n)}$$
 
 Xilinx 的 [DDS IP][PG141] 设计非常典型，我们以此为例：它包括 **Phase Generator** 与 **Phase to Sinusoid** 电路。**Phase Generator** 中又包括 **Phase Accmulator** 和 **Dither Generator**；**Phase to Sinusoid** 中包括 **SIN/COS LUT** 和 **Taylor Series Correction**。
 
-![DDS Arch](/image/dds-core-arch.png)
+![DDS Arch](dds-core-arch.png)
 
 由于 Xilinx DDS IP 在接口上的控制信号比较多，结构也设计的比较复杂，我们可以设计一个精简的 DDS。**Dither Generator** 和 **Taylor Series Correction** 是可选的，并且是互斥的。相位抖动 DDS 结构简单，我们考虑采用这种结构：
 
-![DDS 算法](/image/dds-core-simple.png)
+![DDS 算法](dds-core-simple.png)
 
 首先是一个精确的，例如 16 bits 的相位累加器，其相位值加上抖动产生器产生的随机数。其和进行截位后作为查找表的地址。采用 System Generator 实现的上述 DDS 如下：
 
-![DDS 实现](/image/dds-sysgen.png)
+![DDS 实现](dds-sysgen.png)
 
 需要注意的是，相位累加器的位宽为 16，相位计算（查表）时的位宽为 10，需要截位的 6 位都被加上了随机数。实际的系统中如果还需要精简，随机数的位数可以缩减到 3~4 位，但是其随机性必须要比较好。也就是说，如果采用 PRBS 作为抖动源的话，PRBS 序列的长度必须稍长。PRBS6 只有 63 bits，实验中会发现有点不够用（表现为输出信号仍然有较小的 spur），因此这里采用了 PRBS10 截取高 6 bits，效果稍好：
 
-![DDS 实现2](/image/dds-dither2.png)
+![DDS 实现2](dds-dither2.png)
 
 蓝色没有采用抖动；基佬紫为抖动之后的结果。可以看到 SFDR 大概有 71 dB，改善了 11 dB。
 
@@ -113,8 +111,6 @@ $$cos(x) = sin(x+\frac{\pi}{2})$$
 
 ## 参考
 
-- [PG141][PG141]
+- [PG141](http://www.xilinx.com/support/documentation/ip_documentation/dds_compiler/v6_0/pg141-dds-compiler.pdf)
 - <http://www.ee.scu.edu/classes/2005fall/elen226/dds_2.pdf>
 - <http://www.analog.com/media/cn/training-seminars/tutorials/450968421DDS_Tutorial_rev12-2-99.pdf>
-
-[PG141]: http://www.xilinx.com/support/documentation/ip_documentation/dds_compiler/v6_0/pg141-dds-compiler.pdf
