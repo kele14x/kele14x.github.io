@@ -18,4 +18,4 @@ Generally target on Xilinx's device. However, some parts should still suit for g
 
 ## About
 
-[About Me](./about-me/about-me.md)
+- [About Me and This Blog](./about-me/about-me.md)
