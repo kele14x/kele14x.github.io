@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>SystemVerilog Variable and Net</title>
+  <title>systemverilog-variable-and-net</title>
   <style>
     html {
       line-height: 1.5;
@@ -148,19 +148,18 @@
   <![endif]-->
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">SystemVerilog Variable and Net</h1>
-<p class="date">2020-12-29T13:21:19+08:00</p>
-</header>
+<h1 id="systemverilog-variable-and-net">SystemVerilog Variable and Net</h1>
 <h2 id="verilog">Verilog</h2>
-<p>During school, my EDA teacher told me to use <code>wire</code> and <code>reg</code> in my Verilog design. And for a very long time, I have the feeling the <code>wire</code> is for model a logic connection and <code>reg</code> is for register. But that’s very wrong.</p>
-<p>The <a href="https://ieeexplore.ieee.org/document/1620780">Verilog HDL LRM</a> has defined many data types, and group them into two main groups: the <em>net</em> data types and <em>variable</em> data types. <code>wire</code> is most (and almost all) used <em>net</em> type, and <code>reg</code> is most used <em>variable</em> type. LRM difference the <em>net</em> data types and <em>variable</em> data type with if it can store a value. <em>variable</em> can, but <em>net</em> can’t. So the value of <em>net</em> must be depended on other <em>variable</em>.</p>
-<p>So it’s seems natural to map <code>wire</code> with combination logic, and <code>reg</code> with real registers in hardware. It’s true that <code>wire</code> will model combination logic, but it’s no true for <code>reg</code>. In fact, depends on your Verilog code, <code>reg</code> can become combination logic, registers, or even latch.</p>
-<p>Consider that the name <code>reg</code> is very easy for people to associate it with register in real hardware. They choose a poor name.</p>
+<p>During school, my EDA teacher told me to use <code>wire</code> and <code>reg</code> in my Verilog design. For the long time, I have the feeling the <code>wire</code> models a logic connection and <code>reg</code> models hardware register. That’s wrong.</p>
+<p>The <a href="https://ieeexplore.ieee.org/document/1620780">Verilog HDL LRM</a> has defined many data types, and group them into two main groups: the <em>net</em> data types and <em>variable</em> data types. <code>wire</code> is mostly (and almost all) used <em>net</em> type, and <code>reg</code> is mostly used <em>variable</em> type. LRM difference the <em>net</em> data types and <em>variable</em> data type with if it can store a value. <em>variable</em> can, but <em>net</em> can’t. So the value of <em>net</em> must be depended on other <em>variable</em>.</p>
+<p>So, it seems natural to map <code>wire</code> with combination logic, and <code>reg</code> with real registers in hardware. It’s true that <code>wire</code> will model combination logic, but it’s no for <code>reg</code>. In fact, depends on your Verilog code, <code>reg</code> can become combination logic, registers, or even latch.</p>
+<p>Consider that the name <code>reg</code> is confusable for people to associate it with a register in real hardware. They choose a poor name.</p>
 <h2 id="systemverilog">SystemVerilog</h2>
 <p>When things comes to SystemVerilog, seems they want to fix this problem. So the <a href="https://ieeexplore.ieee.org/document/8299595">SV-LRM</a> makes a distinction between data object and its data type.</p>
 <blockquote>
 <p><strong>data object</strong>: A named entity that has a data value associated with it. Examples of data objects are nets, variables, and parameters. A data object has a data type that determines which values the data object can have.</p>
+</blockquote>
+<blockquote>
 <p><strong>data type</strong>: A set of values and a set of operations that can be performed on those values. Examples of data types are logic, real, and string. Data types can be used to declare data objects or to define user-defined data types that are constructed from other data types.</p>
 </blockquote>
 <h3 id="nets">Nets</h3>
@@ -176,9 +175,9 @@
 <pre class="systemverilog"><code>var logic v; // same as var reg v;</code></pre>
 <p>will declare a data object name <code>v</code>, it’s <em>variable</em> with data type <code>logic</code>. <em>variable</em> does not have such a thing called variable type.</p>
 <p>Like verilog, <em>variable</em> can be combination logic, registers, or even latch.</p>
-<p>What about <code>reg</code>? In-fact, <code>reg</code> and <code>logic</code> is same thing. <code>reg</code> is till there for backward compatible with Verilog. But it’s not recommended for new design, since the name is confusable.</p>
+<p>What about <code>reg</code>? In-fact, <code>reg</code> and <code>logic</code> are the same thing. <code>reg</code> is till there for backward compatible with Verilog. It’s not recommended for new design, since the name confuses a lot.</p>
 <h3 id="implicit-rules">Implicit Rules</h3>
-<p>Util now, things are quite straightforward. If <code>wire</code> is there, you know it’s a net. If you see <code>var</code>, it’s a variable. They all have data type such as <code>logic</code>, <code>reg</code>. The difference between <em>net</em> and <em>variable</em> is that <em>net</em> does not store a value.</p>
+<p>Util now, things are straightforward. If <code>wire</code> is there, you know it’s a net. If you see <code>var</code>, it’s a variable. They all have data type such as <code>logic</code>, <code>reg</code>. The difference between <em>net</em> and <em>variable</em> is that <em>net</em> does not store a value.</p>
 <p>But things goes confusion when you still see <code>wire a</code> and <code>reg b</code> in SystemVerilog file… This is may because many designers are come from Verilog, and <code>var</code> or <code>logic</code> can be omitted for compatible with Verilog.</p>
 <p>So what is <code>wire a</code> and <code>reg b</code> in SystemVerilog? From LRM, <code>wire a</code> is net declaration with implicit data type <code>logic</code>. So <code>wire a</code> is equivalent to <code>wire logic a</code>.</p>
 <p>For <code>reg b</code> it’s not that simple. <code>reg r</code> is equivalent to <code>var logic r</code> for data object inside module. For port, a port can be net or variable, and default is net. So <code>reg b</code> is equivalent to <code>wire logic b</code> for port declaration.</p>
@@ -213,11 +212,11 @@ endmodule</code></pre>
 <h3 id="recommendations">Recommendations</h3>
 <p>My recommendations are:</p>
 <ol type="1">
-<li><p>For port declaration, use explicit <code>var</code>. This makes your port have be a variable. And multi-driven is not allowed for variable, so you can easy see issue during design.</p></li>
+<li><p>For port declaration, use explicit <code>var</code>. This makes your port have be a variable. Multi-driven is not allowed for variable, so you can easily see issue during design.</p></li>
 <li><p>Use <code>logic</code> mainly. So you will default get a variable, so you can detect multi-drive.</p></li>
 <li><p>Do not use <code>reg</code>. It’s a poor name and replaced by <code>logic</code>.</p></li>
 <li><p>If you really want net, use <code>wire</code>.</p></li>
-<li><p>Set <code>default_nettype</code> directive to <code>none</code> for all source file. It will require you explicit write <code>wire</code> when you want net. Also it will prevent you from accidentally declare a new net when you have a typo. (If not, synthesis tool usually will give a warning, but quite unremarkable).</p></li>
+<li><p>Set <code>default_nettype</code> directive to <code>none</code> for all source file. It will require you explicit write <code>wire</code> when you want net. Also, it will prevent you from accidentally declare a new net when you have a typo. (If not, synthesis tool will usually give a warning, but quite unremarkable).</p></li>
 </ol>
 </body>
 </html>
