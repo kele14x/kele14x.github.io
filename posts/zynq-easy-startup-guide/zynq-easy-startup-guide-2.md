@@ -1,9 +1,4 @@
----
-title: "ZYNQ Easy Startup Guide, Part II"
-date: 2020-02-27T14:46:52+08:00
-categories: [FPGA]
-tags: [ZYNQ, Linux, PetaLinux]
----
+# ZYNQ Easy Startup Guide, Part II
 
 In previous part I of ZYNQ Easy Startup Guide, I introduced how we start a bare metal PS program on ZYNQ7 board. In the second part of this serious, we will try to build and start Linux on ZYNQ, using Xilinx's PetaLinux tool.
 

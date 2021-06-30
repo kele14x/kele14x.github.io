@@ -1,13 +1,6 @@
----
-title: "ZYNQ Easy Startup Guide, Part I"
-date: 2020-02-13T00:00:00+08:00
-categories: [FPGA]
-tags: [ZYNQ, Vivado, Vitis, Bare Metal]
----
+# ZYNQ Easy Startup Guide, Part I
 
 Xilinx release Vitis tool last year, replaces it's old Xilinx SDK. There is few documents for it, and I'm planning to switch to it from SDK. Let's try start from sketch so that we can study some basic concepts. **Part I** will including a simple PL design and a simple single core bare metal PS program, from project to boot on board.
-
-<!--more-->
 
 ## Required Things
 

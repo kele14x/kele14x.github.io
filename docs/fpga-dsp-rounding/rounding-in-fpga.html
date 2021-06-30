@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="dcterms.date" content="2017-06-26" />
-  <title>FPGA 中的数值修约（Rounding）</title>
+  <title>rounding-in-fpga</title>
   <style>
     html {
       line-height: 1.5;
@@ -165,12 +164,8 @@
   <![endif]-->
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">FPGA 中的数值修约（Rounding）</h1>
-<p class="date">2017-06-26</p>
-</header>
+<h1 id="fpga-中的数值修约rounding">FPGA 中的数值修约（Rounding）</h1>
 <p>对于一个数，如果我们无需那么高的位宽（精度），那么就可以对其修约。修约代表着用一个精度更低（但是更易用）的数来替代它。也许世界上最著名的数值修约的例子就是 <span class="math inline">\pi\approx3.14</span> 了。</p>
-<!--more-->
 <h2 id="实数连续值">实数（连续值）</h2>
 <p>从小学开始，老师就会开始教“有效位”、“四舍五入”的规则。对于大部分的数，处理方式都不会有问题。例如 7.3 比起 8，还是更接近于 7。但是 7.5 呢？它在数轴上距离 7 和 8 一样近（0.5），为何我们一般都将其四舍五入到 8 呢？如果是一个负数，例如 -7.5 又应该如何呢？</p>
 <p>实际上修约的主要艺术就在于如何花式修约 0.5，常见的方法包括：</p>
