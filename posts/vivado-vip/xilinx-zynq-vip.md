@@ -1,14 +1,9 @@
 ---
 title: "Xilinx Zynq Vip"
-date: 2020-01-22T11:28:12+08:00
-categories: [FPGA]
-tags: [ZYNQ, VIP]
 ---
 
 从 Vivado 2017.1 开始，Xilinx 的 Vivado 中集成了一个新的 IP，叫做 *Zynq-7000 Verification IP*（Zynq VIP）。这个 IP 主要用于 Zynq 处理器的逻辑仿真。根据 [Xilinx 的说法](https://www.xilinx.com/products/design-tools/vivado/verification-ip.html)，这个 IP
 将会取代 Zynq-7000 BFM IP。Xilinx 有一个文档 [DS940](https://www.xilinx.com/support/documentation/ip_documentation/processing_system7_vip/v1_0/ds940-zynq-vip.pdf) 来解释这个 IP 怎么用，不过并不是很清晰。我们来看看怎么用它。
-
-<!--more-->
 
 ## 基础
 
@@ -53,7 +48,7 @@ tags: [ZYNQ, VIP]
 
 1. 运行 **test** 这个空仿真，以便确认 VIP 的 Hierarchy 路径。找到 **/test/DUT/design_1_i/processing_system7_0/inst**，这就是 Zynq VIP 的路径
 
-   ![](/image/xilinx-zynq-vip-1.png "Simulation - test")
+   ![Simulation - test](xilinx-zynq-vip-1.png)
 
 2. 在 **test.sv** 中添加：
 
@@ -64,7 +59,7 @@ tags: [ZYNQ, VIP]
        DUT.design_1_i.processing_system7_0.inst.fpga_soft_reset(0);
    end
    ```
-   
+
    注意 `fpga_soft_reset()` 函数，我们已经在调用 Zynq VIP API 了！
 
 3. 在 Waveform 窗口中观察 **/test/DUT/design_1_i/processing_system7_0/inst/FCLK_RESET0_N** 信号，可以看到它在仿真开始时为低，在 1us 时被拉高

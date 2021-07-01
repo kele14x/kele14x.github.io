@@ -150,10 +150,8 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">Xilinx Zynq Vip</h1>
-<p class="date">2020-01-22T11:28:12+08:00</p>
 </header>
 <p>从 Vivado 2017.1 开始，Xilinx 的 Vivado 中集成了一个新的 IP，叫做 <em>Zynq-7000 Verification IP</em>（Zynq VIP）。这个 IP 主要用于 Zynq 处理器的逻辑仿真。根据 <a href="https://www.xilinx.com/products/design-tools/vivado/verification-ip.html">Xilinx 的说法</a>，这个 IP 将会取代 Zynq-7000 BFM IP。Xilinx 有一个文档 <a href="https://www.xilinx.com/support/documentation/ip_documentation/processing_system7_vip/v1_0/ds940-zynq-vip.pdf">DS940</a> 来解释这个 IP 怎么用，不过并不是很清晰。我们来看看怎么用它。</p>
-<!--more-->
 <h2 id="基础">基础</h2>
 <h3 id="什么是-zynq-vip">什么是 Zynq VIP</h3>
 <p><em>Zynq VIP</em> 是一个“Simulation Only”的 IP，用于 Zynq ARM 处理器的“基本功能”的建模和功能仿真。具体来说，我们在仿真平台里，可以使用这个 IP 来模拟 Zynq 对于内存和各个总线的读写，以便验证 Zynq ARM 处理器与其余逻辑的交互的正确性。</p>
@@ -182,7 +180,9 @@
 <h3 id="调用-zynq-vip-api">调用 Zynq VIP API</h3>
 <ol type="1">
 <li><p>运行 <strong>test</strong> 这个空仿真，以便确认 VIP 的 Hierarchy 路径。找到 <strong>/test/DUT/design_1_i/processing_system7_0/inst</strong>，这就是 Zynq VIP 的路径</p>
-<p><img src="/image/xilinx-zynq-vip-1.png" title="Simulation - test" /></p></li>
+<figure>
+<img src="xilinx-zynq-vip-1.png" alt="Simulation - test" /><figcaption aria-hidden="true">Simulation - test</figcaption>
+</figure></li>
 <li><p>在 <strong>test.sv</strong> 中添加：</p>
 <pre class="systemverilog"><code>initial begin
     DUT.design_1_i.processing_system7_0.inst.fpga_soft_reset(1);

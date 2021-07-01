@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="dcterms.date" content="2017-07-06" />
   <title>System Generator 上手</title>
   <style>
     html {
@@ -214,7 +213,6 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">System Generator 上手</h1>
-<p class="date">2017-07-06</p>
 </header>
 <p><a href="https://www.xilinx.com/products/design-tools/vivado/integration/sysgen.html">System Generator</a> 是 Xilinx Vivado 套件里的组件之一。它主要的作用是利用 Matlab 中的 Simulink 组件来完成 FPGA 设计，即将 Simulink 仿真模型 <strong>.slx</strong> 转换为 HDL 文件。具体来说，System Generator 为 Simulink 提供了一套 Block 库，这套 Block 库既可以完成功能仿真，也有对应的 HDL 描述/网表。这和 Matlab 自己的 <a href="https://www.mathworks.com/products/hdl-coder.html">HDL Coder</a> 类似，但由于是 Xilinx 为自己的 FPGA 写的 Block 库，能够比 HDL Coder 接触到更底层的设计，以便进行优化。更多关于两个工具的对比，可以参考 Matlab 的<a href="https://www.mathworks.com/tagteam/74244_92077v00_Xilinx_WhitePaper_final.pdf">这个文档</a>。</p>
 <p>当然也是由于工作的原因，我开始接触这个工具，让我们先简单的看看它是否好用。</p>

@@ -1,6 +1,5 @@
 ---
 title: System Generator 上手
-date: 2017-07-06
 ---
 
 [System Generator][SysGen PG] 是 Xilinx Vivado 套件里的组件之一。它主要的作用是利用 Matlab 中的 Simulink 组件来完成 FPGA 设计，即将 Simulink 仿真模型 **.slx** 转换为 HDL 文件。具体来说，System Generator 为 Simulink 提供了一套 Block 库，这套 Block 库既可以完成功能仿真，也有对应的 HDL 描述/网表。这和 Matlab 自己的 [HDL Coder][HDL Coder] 类似，但由于是 Xilinx 为自己的 FPGA 写的 Block 库，能够比 HDL Coder 接触到更底层的设计，以便进行优化。更多关于两个工具的对比，可以参考 Matlab 的[这个文档][Mathworks WP]。
