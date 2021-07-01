@@ -1,4 +1,6 @@
-# ZYNQ Easy Startup Guide, Part II
+---
+title: ZYNQ Easy Startup Guide, Part II
+---
 
 In previous part I of ZYNQ Easy Startup Guide, I introduced how we start a bare metal PS program on ZYNQ7 board. In the second part of this serious, we will try to build and start Linux on ZYNQ, using Xilinx's PetaLinux tool.
 
@@ -29,9 +31,9 @@ Install PetaLinux is not quite straight forward. So it's covered in this post.
      ```bash
      sudo apt-get install gawk python build-essential gcc git make net-tools libncurses5-dev tftpd zlib1g-dev libssl-dev flex bison libselinux1 gnupg wget diffstat chrpath socat xterm autoconf libtool tar unzip texinfo zlib1g-dev gcc-multilib zlib1g:i386 screen pax gzip
      ```
-     
+
      > Xilinx says one package called **build-essential-dev** is required. But there is no package named this.
-   
+
 3. Install PetaLinux using installer:
    * Manual create folder **~/Tools/Xilinx/PetaLinux/2019.2**.
    * Make the installer executable:
@@ -42,12 +44,12 @@ Install PetaLinux is not quite straight forward. So it's covered in this post.
      ```bash
      ./petalinux-v2019.2-final-installer.run ~/Tools/Xilinx/PetaLinux/2019.2
      ```
-   
+
 4. After install configuration:
 
     * Let `/bin/sh` be bash: `sudo dpkg-reconfigure dash`. Then answer NO.
     * Configure tftp server (Optional, I ignored it).
-    
+
 5. (Optional) Download the **sstate-cache** (8+ GB for arm/zynq) and **downloads** (22+ GB) file if you want a completely off-line workspace. See **README** on download page to see how to use it.
 
 6. (Optional) Download the BSP files if you have OEM board.

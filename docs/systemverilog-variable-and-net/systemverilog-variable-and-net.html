@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>systemverilog-variable-and-net</title>
+  <title>SystemVerilog Variable and Net</title>
   <style>
     html {
       line-height: 1.5;
@@ -148,7 +148,9 @@
   <![endif]-->
 </head>
 <body>
-<h1 id="systemverilog-variable-and-net">SystemVerilog Variable and Net</h1>
+<header id="title-block-header">
+<h1 class="title">SystemVerilog Variable and Net</h1>
+</header>
 <h2 id="verilog">Verilog</h2>
 <p>During school, my EDA teacher told me to use <code>wire</code> and <code>reg</code> in my Verilog design. For the long time, I have the feeling the <code>wire</code> models a logic connection and <code>reg</code> models hardware register. That’s wrong.</p>
 <p>The <a href="https://ieeexplore.ieee.org/document/1620780">Verilog HDL LRM</a> has defined many data types, and group them into two main groups: the <em>net</em> data types and <em>variable</em> data types. <code>wire</code> is mostly (and almost all) used <em>net</em> type, and <code>reg</code> is mostly used <em>variable</em> type. LRM difference the <em>net</em> data types and <em>variable</em> data type with if it can store a value. <em>variable</em> can, but <em>net</em> can’t. So the value of <em>net</em> must be depended on other <em>variable</em>.</p>

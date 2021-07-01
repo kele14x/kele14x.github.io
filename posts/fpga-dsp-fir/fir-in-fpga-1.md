@@ -1,4 +1,6 @@
-# FPGA 中 FIR 滤波器的设计（一）
+---
+title: FPGA 中 FIR 滤波器的设计（一）
+---
 
 FIR 是数字信号处理中一种非常的常见运算。我在学校还在上 VHDL 课时，就被要求写这玩意儿。当然当时我 messed up everything, and no one loves me 就是另外一回事儿了。
 

@@ -1,4 +1,6 @@
-# ZYNQ Easy Startup Guide, Part I
+---
+title: ZYNQ Easy Startup Guide, Part I
+---
 
 Xilinx release Vitis tool last year, replaces it's old Xilinx SDK. There is few documents for it, and I'm planning to switch to it from SDK. Let's try start from sketch so that we can study some basic concepts. **Part I** will including a simple PL design and a simple single core bare metal PS program, from project to boot on board.
 
@@ -94,7 +96,7 @@ After we get FSBL and BSP. Next step is create our simple "Hello World" applicat
 
 For our case, we need one system project which holds our  "Hello World" application.
 
-### Step 3.1. Hello World Application 
+### Step 3.1. Hello World Application
 
 1. In Vitis IDE, create a new application project.
 2. In wizard, create a new system project for this application project.
@@ -103,7 +105,7 @@ For our case, we need one system project which holds our  "Hello World" applicat
    ```c
    #include <stdio.h>
    #include "sleep.h"
-   
+
    int main () {
    	int i = 0;
    	while(1) {

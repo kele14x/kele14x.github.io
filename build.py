@@ -48,6 +48,8 @@ if __name__ == '__main__':
     os.chdir(current_dir)
     print(f'Working on directory: {current_dir}')
 
+    if not os.path.lexists('docs'):
+        os.mkdir('docs')
     plist = build('posts', 'docs')
     build('assets', 'docs')
 

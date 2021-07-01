@@ -1,6 +1,5 @@
 ---
 title: Vivado HLS 简单上手
-date: 2016-07-02
 ---
 
 Vivado HLS 是 Xilinx 的 Vivado 设计套件中的一个组件，它可以将 C/C++/System C 代码编译到 FPGA 设计中常用的 Verilog，VHDL 代码。这些代码可以进一步在 Vivado 中进行综合，最终产生可用的 FPGA 网表。

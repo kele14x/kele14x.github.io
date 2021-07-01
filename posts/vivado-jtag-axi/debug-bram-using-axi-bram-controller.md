@@ -1,6 +1,5 @@
 ---
 title: 用 AXI BRAM Controller 来调试 BRAM
-date: 2016-12-10
 ---
 
 尽管在做 FPGA 产品设计时，仿真是非常重要的步骤，但是仿真确实无法做到所有的事情。有一半是因为仿真的速度实在堪忧，另一半是因为并不是所有的外设都有仿真模型。因此，上硬件调试很多时候也是不可避免的事情。为了观察片内的信号，Xilinx 为其产品提供的工具是 [Integrated Logic Analyzer (ILA)](https://www.xilinx.com/products/intellectual-property/ila.html) 和 [Virtual Input/Output (VIO)](https://www.xilinx.com/products/intellectual-property/vio.html)。大部分时候，这两个 IP 简直如同神器，直到……某个情况下你想看看某个 BRAM 里装的东西是什么。

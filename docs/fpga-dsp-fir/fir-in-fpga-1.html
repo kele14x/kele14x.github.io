@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>fir-in-fpga-1</title>
+  <title>FPGA 中 FIR 滤波器的设计（一）</title>
   <style>
     html {
       line-height: 1.5;
@@ -164,7 +164,9 @@
   <![endif]-->
 </head>
 <body>
-<h1 id="fpga-中-fir-滤波器的设计一">FPGA 中 FIR 滤波器的设计（一）</h1>
+<header id="title-block-header">
+<h1 class="title">FPGA 中 FIR 滤波器的设计（一）</h1>
+</header>
 <p>FIR 是数字信号处理中一种非常的常见运算。我在学校还在上 VHDL 课时，就被要求写这玩意儿。当然当时我 messed up everything, and no one loves me 就是另外一回事儿了。</p>
 <p>一个 <span class="math display">N</span> 阶的 FIR 滤波器的时域表达式为：</p>
 <p><span class="math display">y[n] = \sum_{i = 0}^{N}{h_i \cdot x[n-D-i]}</span></p>

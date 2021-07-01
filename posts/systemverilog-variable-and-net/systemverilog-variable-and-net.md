@@ -1,4 +1,6 @@
-# SystemVerilog Variable and Net
+---
+title: SystemVerilog Variable and Net
+---
 
 ## Verilog
 
