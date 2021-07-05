@@ -28,6 +28,8 @@ Generally target on Xilinx's device. However, some parts should still suit for g
 
 ### Vivado
 
+- [Write OOC DCP](./vivado-ooc-dcp/write-ooc-dcp-in-vivado.md)
+
 - [HSL](./vivado-hls/vivado-hls-hands-on.md)
 
 - [SysGen](./vivado-sysgen/sysgen-hands-on.md)
