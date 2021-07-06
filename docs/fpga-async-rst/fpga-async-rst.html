@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Build ZYNQ Device Tree</title>
+  <title>Asynchronous Reset</title>
   <style>
     html {
       line-height: 1.5;
@@ -212,58 +212,33 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Build ZYNQ Device Tree</h1>
-<p class="date">2020-03-24T14:46:52+08:00</p>
+<h1 class="title">Asynchronous Reset</h1>
 </header>
-<p>Let’s try build a boot image for ZYNQ, in a hard way. Part II will cover device tree.</p>
-<p>Device Tree is key component for running Linux. It’s often be called DTS (Device Tree Structure) or DTB (Device Tree Blob), different depend on whether it is source or compiled binary. We will try to build DTB from source.</p>
-<!-- more -->
-<p>In fact, both u-boot and Linux need a DTS/DTB, we will talk it later. For most ARM board, the DTS is fixed, thus we can just grab one from vender and does not need to “build” it. But it’s not true for Zynq, since the PL side is not fixed. Many IPs are provided as a peripheral and Linux should load drivers for them.</p>
-<h2 id="prerequisites">0. Prerequisites</h2>
-<ul>
-<li><p>Install Xilinx Vitis tool.</p></li>
-<li><p>Build the hardware (PL/FPGA side) design, and export <strong>.xsa</strong> file.</p></li>
-</ul>
-<h2 id="install-xilinx-device-tree-generator">1. Install Xilinx Device Tree Generator</h2>
-<p>In Vivado, we build the PL side design and export the hardware handoff file (<strong>.xsa</strong>). The FPGA design flow ends here. Then we need to generate device tree source file from <strong>.xsa</strong> file. To do this, Xilinx provide a tool called <a href="https://github.com/Xilinx/device-tree-xlnx">Device Tree Generator (DTG)</a> on Github. Using your git tool to clone it and checkout latest release or download the zip file from release page.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:Xilinx/device-tree-xlnx.git</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout xilinx-v2019.2 <span class="at">-b</span> my-xilinx-v2019.2</span></code></pre></div>
-<p>If you download the zip file, unzip to some folder and keep it. The next step is launch Vitis and setup repository, since the generator need to work with Vitis.</p>
-<ol type="1">
-<li>Launch Vitis, on menu bar, find <strong>Xilinx -&gt; Repositories</strong>. The Xilinx preferences window opened.</li>
-<li>In <strong>Local Repositories</strong> or <strong>Global Repositories</strong>, click <strong>New…</strong> to add a new repository. In the popup window, select <em>device-tree-xlnx</em> folder.</li>
-<li>Maybe Vitis need to be restarted to reload repository.</li>
-</ol>
-<p><img src="/image/vitis-setup-repo.png" /></p>
-<h2 id="create-vitis-project">2. Create Vitis Project</h2>
-<ol type="1">
-<li><p>Launch Vitis, create a new <strong>Platform Project</strong>. This opens new project wizard.</p></li>
-<li><p>In the wizard, select the <strong>.xsa</strong> file exported from Vivado.</p></li>
-<li><p>In the Operation system selection, choose <em>device_tree</em> (Only after you setup the repository, it will appear here).</p></li>
-</ol>
-<p><img src="/image/vitis-device-tree-prj.png" /></p>
-<ol start="4" type="1">
-<li><p>Build the project.</p></li>
-<li><p>Find your device tree under <strong>/ps7_cortexa9_0/deivce_tree_domain/bsp</strong> foler.</p></li>
-</ol>
-<p><img src="/image/vitis-device-tree-prj-output.png" /></p>
-<p>Beware that there are two top level <strong>.dts</strong> file here. We will use <strong>system-top.dts</strong>. <strong>zynq-7000.dtsi</strong> is included.</p>
-<p>Another way to generate dts without create a Vitis project is using Vitis <strong>Xilinx -&gt; Generate Device Tree</strong> button.</p>
-<h2 id="build-device-tree-compiler-dtc">3. Build Device Tree Compiler (DTC)</h2>
-<p>Device tree compiler (DTC) is a tool to compile <strong>.dts</strong> file to <strong>.dtb</strong>. Ubuntu has already provide the binary package of dtc, can be installed by:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install detive-tree-compiler</span></code></pre></div>
-<p>Or you can build new version form <a href="https://git.kernel.org/pub/scm/utils/dtc/dtc.git">dtc source at kernel.org</a>. It’s very simple, just need to install <code>build-essential</code> and some packages (I don’t know, follow error message to see which package is needed), and type <code>make</code> in dtc source folder.</p>
-<blockquote>
-<p>Building dtc is not cross-compile, so you does not need setup ARCH and CROSS_COMPILE environment variable.</p>
-</blockquote>
-<p>If build from source, make sure add dtc to <em>PATH</em>.</p>
-<h2 id="build-device-tree-blob">4. Build Device Tree Blob</h2>
-<p>The generated <strong>.dts</strong> file using the c like <strong>#include</strong> lines to include extra <strong>.dtsi</strong> files. This need precompiled or preprocess before use:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-E</span> <span class="at">-nostdinc</span> <span class="at">-undef</span> <span class="at">-D__DTS__</span> <span class="at">-x</span> assembler-with-cpp <span class="at">-o</span> system-top.dts.tmp system-top.dts</span></code></pre></div>
-<p>This will generate <em>system-top.dts.tmp</em> with correct syntax for dtc. Or you can replace all <strong>#include</strong> with dts style <strong>/include/</strong> so you can skip preprocess step.</p>
-<p>Then we can build the <strong>.dtb</strong> file.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dtc</span> <span class="at">-I</span> dts <span class="at">-O</span> dtb <span class="at">-o</span> system-top.dtb system-top.dts.tmp</span></code></pre></div>
-<h2 id="reference">Reference</h2>
-<p>https://xilinx-wiki.atlassian.net/</p>
+<h2 id="the-problem-of-asynchronous-reset">The Problem of Asynchronous Reset</h2>
+<p>If you have looked at Xilinx primitive library, there are 4 types of D Flip-Flops (FF). The differences between them depends on whether they have a synchronous/asynchronous or clear/preset pin. When writing HDL code, we can model an FF with async clear:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always</span> <span class="op">@</span> <span class="op">(</span><span class="kw">posedge</span> clk <span class="dt">or</span> <span class="kw">posedge</span> arst<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>arst<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      data <span class="op">&lt;=</span> <span class="bn">1&#39;b0</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span>cen<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      data <span class="op">&lt;=</span> din<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span></code></pre></div>
+<p>Then you will get a FDCE after synthesis. The code is nothing special. Register <code>data</code> will be set (reset) to <code>1'b0</code> when <code>arst</code> is asserted, and back to normal operation if <code>arst</code> is de-asserted. Since reset have higher priority over clock, the <code>Q</code> output will be cleared even there is no clock.</p>
+<p>But async reset is more complicated than expected. With a long reset period, we can ensure all registers are under reset. However, if async reset is released on the time near the clock edge, the register may enter a metastability state. The output will be unpredictable and may cause the design fail. So, even async reset have timing requirement similar with sync reset. This is a common misunderstanding for new designers.</p>
+<p>The required known relationship between the clock and the async reset signal are called <strong>recovery and removal time</strong> checks. These checks are defined only for de-assertion of asynchronous reset.</p>
+<p>To avoid the problem of async reset, we can divide the situation into two case:</p>
+<h2 id="asynchronous-reset-is-need">Asynchronous Reset is Need</h2>
+<p>For example, if you need to reset a specification region of logic before clock is ready (or even no clock), async reset is the only option. Some ASIC library may even only provide async reset Flip-Flops. In these cases, we usually use a asynchronous reset synchronizer (“asynchronous reset but synchronous release”).</p>
+<figure>
+<img src="fpga-async-rst-sync.png" alt="Asynchronous Reset, Synchronous Release" /><figcaption aria-hidden="true">Asynchronous Reset, Synchronous Release</figcaption>
+</figure>
+<p>When <code>src_arst</code> is assert, all registers and <code>dest_arst</code> are set to 1 immediately. After <code>src_arst</code> is de-assert. It takes serval clock tick for <code>dest_arst</code> to go back to 0. The register chain help cleanup the metastability cased by the unknown arrive time of async reset. At lease 2 FFs are need, more stages of pipeline improves.</p>
+<p>Using clock gating would also help. After disable the clock and assert asynchronous reset, all registers are under reset, release reset, then feed clock again. Consider the possible unstable clock for first cycles, usually we still need this synchronizer.</p>
+<h2 id="asynchronous-reset-could-be-replaced">Asynchronous Reset Could Be Replaced</h2>
+<p>In most case, we can replace async reset with sync reset. In this case, a simple general single-bit CDC circuit will satisfy our requirement:</p>
+<figure>
+<img src="fpga-sync-rst-sync.png" alt="Synchronous Reset, Synchronous Release" /><figcaption aria-hidden="true">Synchronous Reset, Synchronous Release</figcaption>
+</figure>
+<p><code>dest_rst</code> will be asserted and de-asserted synchronously with <code>dest_clk</code>.</p>
 </body>
 </html>

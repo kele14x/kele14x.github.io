@@ -2,7 +2,7 @@ standalone: true
 
 variables:
   mainfont: "'Source Han Serif SC', 'Noto Serif SC', Serif"
-  fontsize: 12pt
+  fontsize: 18px
 
 eol: lf
 
