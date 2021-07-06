@@ -2,11 +2,15 @@
 title: Kele's Blog
 ---
 
+![](head.webp)
+
 Hi, I'm Kele. Welcome to my personal blog, a place to log some of my random thought. I try to write in English but still some content in Chinese. Current topics included here are:
 
 ## FPGA Design
 
 ### General
+
+- [Asynchronous Reset](./fpga-async-rst/fpga-async-rst.md)
 
 - [FIFO](./fpga-fifo/fifos-in-vivado.md)
 
