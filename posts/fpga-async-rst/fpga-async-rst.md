@@ -1,10 +1,18 @@
 ---
-title: Asynchronous Reset
+title: "Asynchronous Reset: the Misunderstanding, Problem and Solution"
 ---
 
-## The Problem of Asynchronous Reset
+We usually discuss synchronous vs asynchronous reset. Readers need to beware that "asynchronous reset" may refer to: 
 
-If you have looked at Xilinx primitive library, there are 4 types of D Flip-Flops (FF). The differences between them depends on whether they have a synchronous/asynchronous or clear/preset pin. When writing HDL code, we can model an FF with async clear:
+1. The register has an async reset pin instead of sync reset pin.
+2. The reset signal arrives asynchronously with your clock.
+3. Your design strategies about reset.
+
+Let's talk them one by one.
+
+## Register with Asynchronous Reset
+
+First, let's look at the verilog code:
 
 ```verilog
   always @ (posedge clk or posedge arst) begin
@@ -16,28 +24,43 @@ If you have looked at Xilinx primitive library, there are 4 types of D Flip-Flop
   end
 ```
 
-Then you will get a FDCE after synthesis. The code is nothing special. Register `data` will be set (reset) to `1'b0` when `arst` is asserted, and back to normal operation if `arst` is de-asserted. Since reset have higher priority over clock, the `Q` output will be cleared even there is no clock.
+The code holds nothing special. `data` will be reset to `1'b0` when `arst` asserted, and back to normal operation if `arst` de-asserted. Since reset have higher priority over clock, the `Q` output will be cleared even without the edge of clock. After synthesis, you will surely get a Flip-Flop register with async reset.
 
-But async reset is more complicated than expected. With a long reset period, we can ensure all registers are under reset. However, if async reset is released on the time near the clock edge, the register may enter a metastability state. The output will be unpredictable and may cause the design fail. So, even async reset have timing requirement similar with sync reset. This is a common misunderstanding for new designers.
+The time async reset asserted is usually not import, since the output of register will be guaranteed after reset. However, if async reset is released on the time near the clock edge, the register may enter a metastability state. Metastability means unpredictable output, and possibility of fail. So, **even async reset have timing requirement similar with sync reset**. This is a common misunderstanding for new designers. The required timing relationship is called **recovery and removal time** check.
 
-The required known relationship between the clock and the async reset signal are called **recovery and removal time** checks. These checks are defined only for de-assertion of asynchronous reset.
+![Recovery and Removal Time Checks](fpga-async-timing.drawio.png)
 
-To avoid the problem of async reset, we can divide the situation into two case:
+**Recovery check** ensures reset signal goes stable at least "recovery time" before the active clock edge. Like "setup time" for sync pin, right? **Removal check** ensures reset signal should only change at least "removal time" after the active clock edge. Similar with "hold time". Note that the "recovery and removal time" only defined for the de-assertion of sync reset. Since assertion of async reset will take charge of the output, regardless the clock edge.
 
-## Asynchronous Reset is Need
+## The Reset Signal Arrives Asynchronously
 
-For example, if you need to reset a specification region of logic before clock is ready (or even no clock), async reset is the only option. Some ASIC library may even only provide async reset Flip-Flops. In these cases, we usually use a asynchronous reset synchronizer ("asynchronous reset but synchronous release").
+The natural behavior of async reset pin self brings no problem, as long as it meets the recovery and removal time requirement. The real problem is the violation of timing requirement. For example, if the reset signal comes from an external pin, nothing could ensure when it arrives. Other example including use locking indicator of PLL as async reset. Reset comes from other time domains should also be considered as async. We already know that even async reset signal need to satisfy the recovery and removal time, or it may cause the design fail.
+
+To avoid the problem of async reset signal, we usually have an "asynchronous reset synchronizer" circuit. Here we give two most used:
+
+### 1. Asynchronous Reset, Synchronous Release
 
 ![Asynchronous Reset, Synchronous Release](fpga-async-rst-sync.png)
 
-When `src_arst` is assert, all registers and `dest_arst` are set to 1 immediately. After `src_arst` is de-assert. It takes serval clock tick for `dest_arst` to go back to 0. The register chain help cleanup the metastability cased by the unknown arrive time of async reset. At lease 2 FFs are need, more stages of pipeline improves.
+Several registers are chained together. Those registers have async reset pin connected to external reset input. When `src_arst` asserted, all registers and `dest_arst` goes to 1 immediately. After `src_arst` de-assert, it takes several clock ticks before `dest_arst` goes back to 0. To clean up the metastability cased by the unknown arrive time of async reset, the chain need at lease 2 FFs. More taps of pipeline helps to reduce the mean time between failures (MTBF).
 
-Using clock gating would also help. After disable the clock and assert asynchronous reset, all registers are under reset, release reset, then feed clock again. Consider the possible unstable clock for first cycles, usually we still need this synchronizer.
-
-## Asynchronous Reset Could Be Replaced
-
-In most case, we can replace async reset with sync reset. In this case, a simple general single-bit CDC circuit will satisfy our requirement:
+### 2. Full Synchronizer
 
 ![Synchronous Reset, Synchronous Release](fpga-sync-rst-sync.png)
 
-`dest_rst` will be asserted and de-asserted synchronously with `dest_clk`.
+A simple general purpose single-bit CDC circuit may satisfy our requirement. `dest_rst` will assert and de-assert synchronously with `dest_clk`. The synced reset could safely go to async or sync reset pin of registers. Comparing with 1, it will not work without the presence of clock.
+
+## Synchronous vs Asynchronous Reset
+
+If you can decide the reset type to use for your registers, don't worry too much. Each can effectively implement the design and archive the purpose of reset. Each has its own advantages and disadvantages. If you need to reset a specification region of logic before a clock starts up (or even with no clock), sync reset can't help. If reset signal also arrives asynchronously, synchronizer type 1 remains the only option. 
+
+ASIC designers usually choose async reset. It saves the amount of transistors. While Xilinx recommends sync reset for their FPGA device. This may because they already implemented sync reset for most of their primitives. Tools can optimize the design deeper using the interchangeability of sync reset. 
+
+Here give the brief summarize of reset type and synchronizes choose:
+
+|             | Gated Clock     | No Gated Clock  |
+|-------------|-----------------|-----------------|
+| Async Reset | Synchronizer #1 | Both            |
+| Sync Reset  | Not possible    | Synchronizer #2 |
+
+Detailed reset strategies will be talked in another post.
