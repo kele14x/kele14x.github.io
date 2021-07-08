@@ -10,7 +10,7 @@ Hi, I'm Kele. Welcome to my personal blog, a place to log some of my random thou
 
 ### General
 
-- [Asynchronous Reset](./fpga-async-rst/fpga-async-rst.md)
+- [Asynchronous Reset: the Misunderstanding, Problem and Solution](./fpga-async-rst/fpga-async-rst.md)
 
 - [FIFO](./fpga-fifo/fifos-in-vivado.md)
 
