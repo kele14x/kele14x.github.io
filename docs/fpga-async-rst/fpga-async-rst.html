@@ -241,14 +241,41 @@
 <p>To avoid the problem of async reset signal, we usually have an “asynchronous reset synchronizer” circuit. Here we give two most used:</p>
 <h3 id="asynchronous-reset-synchronous-release">1. Asynchronous Reset, Synchronous Release</h3>
 <figure>
-<img src="fpga-async-rst-sync.png" alt="Asynchronous Reset, Synchronous Release" /><figcaption aria-hidden="true">Asynchronous Reset, Synchronous Release</figcaption>
+<img src="fpga-async-rst-async.drawio.png" alt="Asynchronous Reset, Synchronous Release" /><figcaption aria-hidden="true">Asynchronous Reset, Synchronous Release</figcaption>
 </figure>
-<p>Several registers are chained together. Those registers have async reset pin connected to external reset input. When <code>src_arst</code> asserted, all registers and <code>dest_arst</code> goes to 1 immediately. After <code>src_arst</code> de-assert, it takes several clock ticks before <code>dest_arst</code> goes back to 0. To clean up the metastability cased by the unknown arrive time of async reset, the chain need at lease 2 FFs. More taps of pipeline helps to reduce the mean time between failures (MTBF).</p>
-<h3 id="full-synchronizer">2. Full Synchronizer</h3>
+<p>Several registers are chained together. Those registers have async reset pin connected to external reset input. When <code>ARST_IN</code> asserted, all registers and <code>ARST_OUT</code> goes to 1 immediately. After <code>ARST_IN</code> de-assert, it takes several clock ticks before <code>ARST_OUT</code> goes back to 0. To clean up the metastability cased by the unknown arrive time of async reset, the chain need at lease 2 FFs. More taps of pipeline helps to reduce the mean time between failures (MTBF).</p>
+<p>Will it solve all the problem of asynchronous reset? Let’s look at the blow circuit:</p>
 <figure>
-<img src="fpga-sync-rst-sync.png" alt="Synchronous Reset, Synchronous Release" /><figcaption aria-hidden="true">Synchronous Reset, Synchronous Release</figcaption>
+<img src="fpga-async-issue.drawio.png" alt="Asynchronous Reset Issue" /><figcaption aria-hidden="true">Asynchronous Reset Issue</figcaption>
 </figure>
-<p>A simple general purpose single-bit CDC circuit may satisfy our requirement. <code>dest_rst</code> will assert and de-assert synchronously with <code>dest_clk</code>. The synced reset could safely go to async or sync reset pin of registers. Comparing with 1, it will not work without the presence of clock.</p>
+<p>The output of Register A goes to Register B. They both working on same clock so expecting synchronous data. Keep in mind that <code>ARST</code> to register B’s <code>D</code> pin is a valid data path (<code>ARST</code> -&gt; <code>PRE</code> -&gt; <code>Q</code> -&gt; Register A <code>PRE</code> -&gt; Register A <code>Q</code> -&gt; Register B <code>D</code>). Reset source “run through” a long path and reached a synchronous pin. Since reset source is working asynchronously, this is a design violation to get it captured on a flip-flop which is expecting synchronous data. When designing import control logic such as FSM, carefully implementation should be noticed.</p>
+<h3 id="full-synchronizer">2. Full Synchronizer</h3>
+<p>Another synchronize is shown blow:</p>
+<figure>
+<img src="fpga-async-rst-sync.drawio.png" alt="Synchronous Reset, Synchronous Release" /><figcaption aria-hidden="true">Synchronous Reset, Synchronous Release</figcaption>
+</figure>
+<p>A simple general purpose single-bit CDC circuit may satisfy our requirement. <code>RST_OUT</code> will be asserted and de-asserted synchronously with <code>CLK</code>. So it solves the async reset run through issue. The synced reset could be safely connected to async or sync reset pin of registers. Comparing with 1, it will not work without the presence of clock.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Async Reset</th>
+<th>Sync Reset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Synchronizer #1</td>
+<td>OK</td>
+<td>NOK</td>
+</tr>
+<tr class="even">
+<td>Synchronizer #2</td>
+<td>OK</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table>
 <h2 id="synchronous-vs-asynchronous-reset">Synchronous vs Asynchronous Reset</h2>
 <p>If you can decide the reset type to use for your registers, don’t worry too much. Each can effectively implement the design and archive the purpose of reset. Each has its own advantages and disadvantages. If you need to reset a specification region of logic before a clock starts up (or even with no clock), sync reset can’t help. If reset signal also arrives asynchronously, synchronizer type 1 remains the only option.</p>
 <p>ASIC designers usually choose async reset. It saves the amount of transistors. While Xilinx recommends sync reset for their FPGA device. This may because they already implemented sync reset for most of their primitives. Tools can optimize the design deeper using the interchangeability of sync reset.</p>

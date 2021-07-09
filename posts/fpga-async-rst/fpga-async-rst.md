@@ -2,7 +2,7 @@
 title: "Asynchronous Reset: the Misunderstanding, Problem and Solution"
 ---
 
-We usually discuss synchronous vs asynchronous reset. Readers need to beware that "asynchronous reset" may refer to: 
+We usually discuss synchronous vs asynchronous reset. Readers need to beware that "asynchronous reset" may refer to:
 
 1. The register has an async reset pin instead of sync reset pin.
 2. The reset signal arrives asynchronously with your clock.
@@ -40,21 +40,34 @@ To avoid the problem of async reset signal, we usually have an "asynchronous res
 
 ### 1. Asynchronous Reset, Synchronous Release
 
-![Asynchronous Reset, Synchronous Release](fpga-async-rst-sync.png)
+![Asynchronous Reset, Synchronous Release](fpga-async-rst-async.drawio.png)
 
-Several registers are chained together. Those registers have async reset pin connected to external reset input. When `src_arst` asserted, all registers and `dest_arst` goes to 1 immediately. After `src_arst` de-assert, it takes several clock ticks before `dest_arst` goes back to 0. To clean up the metastability cased by the unknown arrive time of async reset, the chain need at lease 2 FFs. More taps of pipeline helps to reduce the mean time between failures (MTBF).
+Several registers are chained together. Those registers have async reset pin connected to external reset input. When `ARST_IN` asserted, all registers and `ARST_OUT` goes to 1 immediately. After `ARST_IN` de-assert, it takes several clock ticks before `ARST_OUT` goes back to 0. To clean up the metastability cased by the unknown arrive time of async reset, the chain need at lease 2 FFs. More taps of pipeline helps to reduce the mean time between failures (MTBF).
+
+Will it solve all the problem of asynchronous reset? Let's look at the blow circuit:
+
+![Asynchronous Reset Issue](fpga-async-issue.drawio.png)
+
+The output of Register A goes to Register B. They both working on same clock so expecting synchronous data. Keep in mind that `ARST` to register B's `D` pin is a valid data path (`ARST` -> `PRE` -> `Q` -> Register A `PRE` -> Register A `Q` -> Register B `D`). Reset source "run through" a long path and reached a synchronous pin. Since reset source is working asynchronously, this is a design violation to get it captured on a flip-flop which is expecting synchronous data. When designing import control logic such as FSM,  carefully implementation should be noticed.
 
 ### 2. Full Synchronizer
 
-![Synchronous Reset, Synchronous Release](fpga-sync-rst-sync.png)
+Another synchronize is shown blow:
 
-A simple general purpose single-bit CDC circuit may satisfy our requirement. `dest_rst` will assert and de-assert synchronously with `dest_clk`. The synced reset could safely go to async or sync reset pin of registers. Comparing with 1, it will not work without the presence of clock.
+![Synchronous Reset, Synchronous Release](fpga-async-rst-sync.drawio.png)
+
+A simple general purpose single-bit CDC circuit may satisfy our requirement. `RST_OUT` will  be asserted and de-asserted synchronously with `CLK`. So it solves the async reset run through issue. The synced reset could be safely connected to async or sync reset pin of registers. Comparing with 1, it will not work without the presence of clock.
+
+|                 | Async Reset | Sync Reset |
+|-----------------|-------------|------------|
+| Synchronizer #1 | OK          | NOK        |
+| Synchronizer #2 | OK          | OK         |
 
 ## Synchronous vs Asynchronous Reset
 
-If you can decide the reset type to use for your registers, don't worry too much. Each can effectively implement the design and archive the purpose of reset. Each has its own advantages and disadvantages. If you need to reset a specification region of logic before a clock starts up (or even with no clock), sync reset can't help. If reset signal also arrives asynchronously, synchronizer type 1 remains the only option. 
+If you can decide the reset type to use for your registers, don't worry too much. Each can effectively implement the design and archive the purpose of reset. Each has its own advantages and disadvantages. If you need to reset a specification region of logic before a clock starts up (or even with no clock), sync reset can't help. If reset signal also arrives asynchronously, synchronizer type 1 remains the only option.
 
-ASIC designers usually choose async reset. It saves the amount of transistors. While Xilinx recommends sync reset for their FPGA device. This may because they already implemented sync reset for most of their primitives. Tools can optimize the design deeper using the interchangeability of sync reset. 
+ASIC designers usually choose async reset. It saves the amount of transistors. While Xilinx recommends sync reset for their FPGA device. This may because they already implemented sync reset for most of their primitives. Tools can optimize the design deeper using the interchangeability of sync reset.
 
 Here give the brief summarize of reset type and synchronizes choose:
 
