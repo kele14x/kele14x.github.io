@@ -269,5 +269,9 @@ Control flows -&gt; Control logics</code></pre>
 <p>Vivado HLS 并不能完全的替代 Vivado，因为它的定位仅仅是模块/IP的设计。另外也并不是所有的模块 HLS 都能够（方便的）设计出来。一般来说，FPGA 内会进行两种工作：其一是数值计算，其二是逻辑控制。HLS 更擅长进行数值计算类模块的设计，而要设计逻辑控制类的模块，比如 UART 收发器，就有些不知如何是好了。</p>
 <p>另外，HLS 生成的 IP，并不能像很多 Xilinx 提供的或者 HDL 编写的 IP 那样可以通过设置 <strong>Parameters</strong> 来作通用化。修改参数（比如位宽）只能从源代码级修改再生成。</p>
 <p>最后 HLS 的模块接口设计并不是那么得心应手，控制信号和时序有些时候显得有点奇怪。还需要打开 Vivado 进行 RTL 仿真来看看怎么用。</p>
+<hr>
+<p>
+© 2021 <a href="https://github.com/kele14x">Kele</a>, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">CC BY-NC-SA 4.0</a>
+</p>
 </body>
 </html>

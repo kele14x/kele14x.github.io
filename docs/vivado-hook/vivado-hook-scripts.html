@@ -229,5 +229,9 @@
 <p><code>tcl.pre</code>，就是这玩意儿了。对于我的问题，新建一个.tcl文件，随便放在哪儿，写入：</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>set_property SEVERITY <span class="kw">{</span>Warning<span class="kw">}</span> <span class="kw">[</span>get_drc_checks LUTLP<span class="dv">-1</span><span class="kw">]</span></span></code></pre></div>
 <p>然后在上图的设置内指定tcl.pre到这个文件就行了。注意设置里有几项<code>tcl.pre</code>，是编译的不同时期执行的文件，这里的设置的是<code>write_bitsream</code>之前。</p>
+<hr>
+<p>
+© 2021 <a href="https://github.com/kele14x">Kele</a>, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">CC BY-NC-SA 4.0</a>
+</p>
 </body>
 </html>
