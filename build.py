@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import os
 import shutil
 import subprocess
@@ -9,7 +9,7 @@ def convert_file(source: str, target: str):
     cmd = f'pandoc -d pandoc.yaml -o {target} {source}'
     print(f'Run command: {cmd}')
     try:
-        subprocess.run(cmd)
+        subprocess.run(cmd, shell=True)
     except subprocess.CalledProcessError as e:
         print(e)
 
@@ -48,6 +48,7 @@ if __name__ == '__main__':
     os.chdir(current_dir)
     print(f'Working on directory: {current_dir}')
 
+    print(f'Create folder docs')
     if not os.path.lexists('docs'):
         os.mkdir('docs')
     plist = build('posts', 'docs')
