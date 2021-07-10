@@ -6,6 +6,8 @@ variables:
 
 eol: lf
 
+include-after-body: [footer.txt]
+
 html-math-method:
   method: katex
 
