@@ -12,9 +12,45 @@ Recently, I got confirm from Xilinx FAE that Vitis (including Vivado) works bett
 sudo apt install libtinifo5
 ```
 
-Then download installer and run `xsetup`. Without this library, installer will suck at "generating device list" and never finish. 
+Then download installer and run `xsetup`. Without this library, installer will suck at "generating device list" and never finish.
 
 Xilinx does not allow you to run the installer with root privilege. If you want to install Vivado to **/opt** directory (a proper place to share installed software with other users), you need to create a folder using `sudo`. Then change the folder's mode to give your current user write permission.
+
+### Install VIVADO in Batch Mode
+
+I used to face Vivado/Vitis 2020.1 GUI installer's bug. It does not work under Ubuntu 18.04.5 (it works under Ubuntu 18.04.4). To bypass the issue, I have to install it in batch mode. The installer provide a CLI interface:
+
+```bash
+./xsetup -h
+```
+
+This will see all parameters of the installer.
+
+1. Generate the install configuration file:
+
+    ```bash
+    ./xsetup -b ConfigGen
+    ```
+
+    This will generate a "install configuration file" **~/.Xilinx/install_config.txt**. Edit it with text editor, select features, install folder, etc.
+
+2. Install Vivado/Vitis:
+
+    ```bash
+    ./xsetup -a XilinxEULA,3rdPartyEULA,WebTalkTerms -b install -c ~/.Xilinx/install_config.txt
+    ```
+
+    It takes a while.
+
+### Uninstall
+
+After installation, the uninstaller will appear on **\<vivado_install\>/.xinstall/xsetup**. You can uninstall Vivado/Vitis using:
+
+```bash
+./xsetup -b uninstall
+```
+
+Or run the uninstall desktop entry file.
 
 ## Install Cable Driver
 
