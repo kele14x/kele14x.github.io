@@ -220,11 +220,27 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libtinifo5</span></code></pre></div>
 <p>Then download installer and run <code>xsetup</code>. Without this library, installer will suck at “generating device list” and never finish.</p>
 <p>Xilinx does not allow you to run the installer with root privilege. If you want to install Vivado to <strong>/opt</strong> directory (a proper place to share installed software with other users), you need to create a folder using <code>sudo</code>. Then change the folder’s mode to give your current user write permission.</p>
+<h3 id="install-vivado-in-batch-mode">Install VIVADO in Batch Mode</h3>
+<p>I used to face Vivado/Vitis 2020.1 GUI installer’s bug. It does not work under Ubuntu 18.04.5 (it works under Ubuntu 18.04.4). To bypass the issue, I have to install it in batch mode. The installer provide a CLI interface:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./xsetup</span> <span class="at">-h</span></span></code></pre></div>
+<p>This will see all parameters of the installer.</p>
+<ol type="1">
+<li><p>Generate the install configuration file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./xsetup</span> <span class="at">-b</span> ConfigGen</span></code></pre></div>
+<p>This will generate a “install configuration file” <strong>~/.Xilinx/install_config.txt</strong>. Edit it with text editor, select features, install folder, etc.</p></li>
+<li><p>Install Vivado/Vitis:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./xsetup</span> <span class="at">-a</span> XilinxEULA,3rdPartyEULA,WebTalkTerms <span class="at">-b</span> install <span class="at">-c</span> ~/.Xilinx/install_config.txt</span></code></pre></div>
+<p>It takes a while.</p></li>
+</ol>
+<h3 id="uninstall">Uninstall</h3>
+<p>After installation, the uninstaller will appear on <strong>&lt;vivado_install&gt;/.xinstall/xsetup</strong>. You can uninstall Vivado/Vitis using:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./xsetup</span> <span class="at">-b</span> uninstall</span></code></pre></div>
+<p>Or run the uninstall desktop entry file.</p>
 <h2 id="install-cable-driver">Install Cable Driver</h2>
 <p>Cable driver is required if you need debug hardware using Xilinx <em>Platform Cable USB II</em>. Seems this driver also support <a href="https://store.digilentinc.com">Digilent</a>’s <a href="https://store.digilentinc.com/jtag-hs3-programming-cable/">JTAG-HSx</a> and <a href="https://store.digilentinc.com/jtag-smt4-surface-mount-programming-module/">JTAG-SMTx</a>. If you have Vivado full or lab version installed, the driver installer lies on:</p>
 <p><strong>&lt;install_folder&gt;/Vivado/2021.1/data/xicom/cable_drivers/lin64/install_script/install_drivers/install_drivers</strong>.</p>
 <p>Run it with <code>sudo</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ./install_drivers</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ./install_drivers</span></code></pre></div>
 <h2 id="desktop-entry">Desktop Entry</h2>
 <p>On Linux, Xilinx installer will only create desktop entry (<strong>.desktop* files) for current user. This cause some inconvenient for sharing the installation with others. Those desktop entry lies under </strong>~/Desktop** and <strong>~/.local/share/applications</strong>. You can copy some of them from *~/.local/share/applications<strong> to </strong>/usr/share/applications**. So other user can start Vivado from gnome launcher.</p>
 <hr>
