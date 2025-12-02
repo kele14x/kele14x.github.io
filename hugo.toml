@@ -2,6 +2,7 @@ baseURL = "https://blog.kele14.com/"
 languageCode = "en-us"
 title = "Kele's Blog"
 theme = "hugo-xmin"
+uglyURLs = true
 
 [menus]
   [[menus.main]]

@@ -1,5 +1,6 @@
 ---
 title: "8b/10b 编码"
+date: 2019-11-25
 ---
 
 [8b/10b](https://en.wikipedia.org/wiki/8b/10b_encoding) 编码是一种[线编码](https://en.wikipedia.org/wiki/Line_code)，它将 8-bit 数据信息和 1-bit 控制信息编码为 1 个 10-bit 的符号。主要的作用在于保持数据流中的直流平衡，即 0 和 1 的数量差不多相等。目前常用的 8b/10b 编码表是 IBM 最早在 1983 年提出的（[A DC-Balanced, Partitioned-Block, 8B/10B Transmission Code](https://ieeexplore.ieee.org/document/5390392)），目前仍然应用在很多通信总线中。经过编码之后再传输显而易见的好处有：

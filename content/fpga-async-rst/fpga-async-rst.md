@@ -1,5 +1,6 @@
 ---
 title: "Asynchronous Reset: the Misunderstanding, Problem and Solution"
+date: 2021-07-09
 ---
 
 We usually discuss synchronous vs asynchronous reset. Readers need to beware that "asynchronous reset" may refer to:
