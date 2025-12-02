@@ -1,6 +1,9 @@
 # Editor
-.idea/
 .vscode/
 
-# venv
-venv/
+# MacOS
+.DS_Store
+
+# Hugo
+public/
+*.lock
