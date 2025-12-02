@@ -1,5 +1,5 @@
 ---
-title: Kele's Blog
+title: Home
 ---
 
 # Kele's Blog

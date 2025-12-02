@@ -11,7 +11,7 @@ uglyURLs = true
     weight = 1
   [[menus.main]]
     name = "About"
-    url = "/about"
+    url = "/about.html"
     weight = 2
   [[menus.main]]
     name = "Categories"
