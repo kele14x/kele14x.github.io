@@ -1,5 +1,6 @@
 ---
 title: Write OOC DCP in Vivado
+date: 2021-07-05
 ---
 
 Out-of-context (OOC) is hierarchical design flow described in [UG905 Vivado Design Suite User Guide: Hierarchical Design][UG905]. It enables the ability of doing synthesize and implementation on module independent of rest of the design. So you can do analysis the module earlier and quick. The OOC synthesis or implementation result can be saved as a design checkpoint (DCP) file. The DCP file then delivered to top level as a component, so the design and constraints could be reused.

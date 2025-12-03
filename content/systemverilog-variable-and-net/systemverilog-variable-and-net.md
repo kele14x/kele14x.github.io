@@ -1,5 +1,6 @@
 ---
 title: SystemVerilog Variable and Net
+date: 2020-12-29
 ---
 
 ## Verilog

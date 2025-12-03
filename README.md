@@ -32,7 +32,7 @@ To render math using [KaTex](https://katex.org/), we need to enable passthrough 
           inline = [['\(', '\)']]
 ```
 
-Then include the html in page:
+Then include the html in page ([ref](https://katex.org/docs/autorender)):
 
 ``` html
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha512-fHwaWebuwA7NSF5Qg/af4UeDx9XqUpYpOGgubo3yWu+b2IQR4UeQwbb42Ti7gVAjNtVoI/I9TEoYeu9omwcC6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -56,3 +56,5 @@ Then include the html in page:
     });
 </script>
 ```
+
+The original CDN is replaced by [CDNJS](https://cdnjs.com/libraries/KaTeX).
