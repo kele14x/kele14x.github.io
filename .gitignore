@@ -1,5 +1,6 @@
 # Editor
 .vscode/
+.obsidian/
 
 # MacOS
 .DS_Store
