@@ -5,7 +5,7 @@ date: 2019-11-25
 
 [8b/10b](https://en.wikipedia.org/wiki/8b/10b_encoding) 编码是一种[线编码](https://en.wikipedia.org/wiki/Line_code)，它将 8-bit 数据信息和 1-bit 控制信息编码为 1 个 10-bit 的符号。主要的作用在于保持数据流中的直流平衡，即 0 和 1 的数量差不多相等。目前常用的 8b/10b 编码表是 IBM 最早在 1983 年提出的（[A DC-Balanced, Partitioned-Block, 8B/10B Transmission Code](https://ieeexplore.ieee.org/document/5390392)），目前仍然应用在很多通信总线中。经过编码之后再传输显而易见的好处有：
 
-- 直流平衡：无论数据流中的 0 与 1 有多少，经过编码之后 0，1 数量几乎相等（<= 2)。直流平衡有助于减小传输时需要的带宽；
+- 直流平衡：无论数据流中的 0 与 1 有多少，经过编码之后 0，1 数量几乎相等（<= 2）。直流平衡有助于减小传输时需要的带宽；
 - 检错：接收方可以根据接收到的符号流是否符合编码规则知道其中是否有错误；
 - 时钟恢复：连续的 0 或者 1 的数量不大于 5，因此易于从数据中恢复出波特率。
 
@@ -21,7 +21,7 @@ date: 2019-11-25
 
 编码器的工作流程如下，注意这里 5b/6b 与 3b/4b 编码被合并成了一步：：
 
-```plain
+``` plain
 rd = -1;
 for i = 0:length(instream)
   input = instream(i);
@@ -34,7 +34,7 @@ end
 
 8b/10b 编码可以被拆成两步：
 
-```plain
+``` plain
 function [sym, rd] = 8b10b_encode(data, isK, rd)
   [sym(0:5), rd] = 5b6b_encode(data(4:0), isK, rd);
   [sym(6:9), rd] = 3b4b_encode(data(4:0)， data(7:5), isK, rd);
@@ -45,7 +45,7 @@ end
 
 ### 5b/6b 编码表
 
-```plain
+``` plain
 | INPUT(EDCBA)   | Output(abcdei)  |
 | Name   | BIN   | RD=-1  | RD=+1  |
 | ------ | ----- | ------ | ------ |
@@ -89,7 +89,7 @@ end
 
 ### 3b/4b 编码表
 
-```plain
+``` plain
 | Input(HGF)     | Output(fghj)    |
 | Name   | Bin   | RD=-1  | RD=+1  |
 | ------ | ----- | ------ | ------ |
@@ -119,7 +119,7 @@ end
 
 ### 控制符号
 
-```plain
+``` plain
 |  Input (HGF EDCBA)             | Output (abcdei fghj)      |
 |  Name  | DEC | HEX | BIN       | RD=-1       | RD=+1       |
 | ------ | --- | --- | --------- | ----------- | ----------- |
