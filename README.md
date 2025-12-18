@@ -4,6 +4,18 @@ Source contents of [my blog](https://blog.kele14.com).
 
 ## Configuration
 
+### Enable Markdown Link Render Hook
+
+``` toml
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderHooks]
+      [markup.goldmark.renderHooks.link]
+        useEmbedded = 'fallback'
+```
+
+This enables [markdown link render hook](https://gohugo.io/render-hooks/links/) so that internal link to *.md* becomes *.html* at output.
+
 ### Disable Typographer
 
 The default Hugo's markdown processor [Goldmark](https://github.com/yuin/goldmark/) has enabled the Typographer extension to replaces certain character combinations with HTML entries like dash and quote ([ref](https://gohugo.io/configuration/markup/#typographer

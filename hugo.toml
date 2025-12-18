@@ -36,3 +36,6 @@ uglyURLs = true
           inline = [['\(', '\)']]
       [markup.goldmark.extensions.typographer]
         disable = true
+    [markup.goldmark.renderHooks]
+      [markup.goldmark.renderHooks.link]
+        useEmbedded = 'fallback'
