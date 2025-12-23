@@ -5,6 +5,9 @@
 # MacOS
 .DS_Store
 
+# Draw.io
+*.bkp
+
 # Hugo
 public/
 *.lock
