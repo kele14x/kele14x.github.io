@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+	.slice(0, 8)
+	.map((post) => ({
+		title: post.data.title,
+		date: post.data.date,
+		permalink: post.data.permalink ?? `/${post.id}/`,
+		tags: post.data.tags ?? [],
+	}));
+---
+
+<BaseLayout title="Kele's Blog" description="Notes on FPGA, coding, and communication systems.">
+	<section class="hero panel">
+		<div>
+			<p class="muted">Engineering notes and long-form writeups</p>
+			<h1>Kele's Blog</h1>
+			<p>
+				Hi, I'm Kele. This site collects my blog posts, mostly about FPGA,
+				digital signal processing, communication systems, and a few side topics.
+			</p>
+			<p>
+				The archive includes both English and Chinese posts, with the original post URLs preserved.
+			</p>
+		</div>
+		<img src="/assets/images/site/head.webp" alt="Illustration for Kele's Blog" />
+	</section>
+
+	<section>
+		<p class="muted">Recent posts</p>
+		<ul class="post-list">
+			{posts.map((post) => (
+				<li>
+					<article class="article-card">
+						<p class="meta">{post.date.toLocaleDateString('en-CA')}</p>
+						<h2><a href={post.permalink}>{post.title}</a></h2>
+						{post.tags.length > 0 && (
+							<ul class="tag-list">
+								{post.tags.map((tag) => (
+									<li><a class="tag" href={`/tags/${tag.toLowerCase()}/`}>{tag}</a></li>
+								))}
+							</ul>
+						)}
+					</article>
+				</li>
+			))}
+		</ul>
+	</section>
+</BaseLayout>
