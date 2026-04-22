@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = await getCollection('blog');
+const tagMap = new Map<string, { label: string; count: number }>();
+
+for (const post of posts) {
+	for (const tag of post.data.tags ?? []) {
+		const slug = tag.toLowerCase();
+		const existing = tagMap.get(slug);
+
+		if (existing) {
+			existing.count += 1;
+			continue;
+		}
+
+		tagMap.set(slug, { label: tag, count: 1 });
+	}
+}
+
+const tags = [...tagMap.entries()]
+	.map(([slug, data]) => ({ slug, ...data }))
+	.sort((a, b) => a.slug.localeCompare(b.slug));
+---
+
+<BaseLayout title="Tags | Kele's Blog" description="Browse posts by tag.">
+	<section>
+		<p class="muted">Tags</p>
+		<ul class="post-list">
+			{tags.map((tag) => (
+				<li>
+					<article class="article-card">
+						<h2><a href={`/tags/${tag.slug}/`}>#{tag.label}</a></h2>
+						<p class="meta">{tag.count} {tag.count === 1 ? 'post' : 'posts'}</p>
+					</article>
+				</li>
+			))}
+		</ul>
+	</section>
+</BaseLayout>

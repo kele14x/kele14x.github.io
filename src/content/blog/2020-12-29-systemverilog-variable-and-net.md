@@ -37,7 +37,7 @@ To declare a net, you use the (simplified) syntax:
 
 And, `wire` is one built-in net type. For example:
 
-```systemverilog
+```system-verilog
 wire logic w;
 ```
 
@@ -53,7 +53,7 @@ var <data_type> <variable_identifier>;
 
 An new keyword `var` is here to explicit declare a variable. For example:
 
-```systemverilog
+```system-verilog
 var logic v; // same as var reg v;
 ```
 
@@ -77,7 +77,7 @@ For `reg b` it's not that simple. `reg r` is equivalent to `var logic r` for dat
 
 This is a simple example:
 
-```systemverilog
+```system-verilog
 module variables_and_nets(only_input);
 
 // Net

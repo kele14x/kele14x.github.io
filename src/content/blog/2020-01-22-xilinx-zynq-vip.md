@@ -43,7 +43,7 @@ slug: xilinx-zynq-vip
 1. 创建 Simulation Source，文件名 **test.sv**。注意使用 SystemVerilog 的 *.sv* 格式
 2. 在 **test.sv** 中例化并连接 **design_1_wrapper**，例化名 **DUT**
 
-   ```systemverilog
+   ```system-verilog
    design_1_wrapper DUT (.*);
    ```
 
@@ -55,7 +55,7 @@ slug: xilinx-zynq-vip
 
 2. 在 **test.sv** 中添加：
 
-   ```systemverilog
+   ```system-verilog
    initial begin
        DUT.design_1_i.processing_system7_0.inst.fpga_soft_reset(1);
        #1000;

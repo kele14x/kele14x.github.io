@@ -1,7 +1,11 @@
 # TODO
 
-This is TODOs for this project.
+For the agents: This is TODOs for this project, if any item is done implementation please mark the item as done.
 
-- [ ] Currently the homepage only list recent posts. I want the home page to list all posts from the newest to oldest. Split the posts list into multiple pages, and 10 per each page.
-- [ ] On the nav bar there is one link for the `posts` that link to page to list all posts. If previous TODO item is done, this one is not needed so remove it.
-- [ ] May blog system organize posts using two methods: category and tag. This may be too complex for a simple blog. I want only manage the posts using tags. The tag could be used to group similar posts together (for example, FEC related posts). Please add a top nav bar item for the `Tags`. The tags page should list all tags so let the user navigate between each topic (tags).
+- [x] Change the homepage to show the full post archive instead of only recent posts. Paginate the archive with 10 posts per page. Keep `/` as page 1 and use `/page/2/`, `/page/3/`, etc. for later pages. Keep the hero section on `/` only.
+- [x] Add a top-level `/tags/` page that lists all tags and links to each tag archive page.
+- [x] Add a `Tags` item to the top nav bar.
+- [x] Remove the unused `categories` concept from the blog content schema and content files so posts are managed only by tags.
+- [x] The `head.webp` appears on the hero section and looks good. Please add it to the about page.
+- [x] This is site is build by Astro and host on Github pages. Please update the `about.md` to match the fact.
+- [x] Change the fenced code language label in posts from `systemverilog` to `system-verilog` so Shiki highlights SystemVerilog code blocks correctly during the Astro build.

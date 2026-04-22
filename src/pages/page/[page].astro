@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const pageSize = 10;
+
+export async function getStaticPaths() {
+	const pageSize = 10;
+	const posts = await getCollection('blog');
+	const pageCount = Math.ceil(posts.length / pageSize);
+
+	return Array.from({ length: Math.max(pageCount - 1, 0) }, (_, index) => ({
+		params: {
+			page: String(index + 2),
+		},
+	}));
+}
+
+const currentPage = Number(Astro.params.page);
+const allPosts = (await getCollection('blog'))
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+	.map((post) => ({
+		title: post.data.title,
+		date: post.data.date,
+		slug: post.id,
+		tags: post.data.tags ?? [],
+	}));
+
+const pageCount = Math.ceil(allPosts.length / pageSize);
+const posts = allPosts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+const pages = Array.from({ length: pageCount }, (_, index) => ({
+	page: index + 1,
+	href: index === 0 ? '/' : `/page/${index + 1}/`,
+}));
+---
+
+<BaseLayout title={`Posts - Page ${currentPage} | Kele's Blog`} description={`Page ${currentPage} of the blog archive.`}>
+	<section>
+		<p class="muted">Archive</p>
+		<ul class="post-list">
+			{posts.map((post) => (
+				<li>
+					<article class="article-card">
+						<p class="meta">{post.date.toLocaleDateString('en-CA')}</p>
+						<h2><a href={`/${post.slug}/`}>{post.title}</a></h2>
+						{post.tags.length > 0 && (
+							<ul class="tag-list">
+								{post.tags.map((tag) => (
+									<li><a class="tag" href={`/tags/${tag.toLowerCase()}/`}>{tag}</a></li>
+								))}
+							</ul>
+						)}
+					</article>
+				</li>
+			))}
+		</ul>
+		<nav class="pagination" aria-label="Posts pagination">
+			{pages.map((page) => (
+				<a class:list={["page-link", page.page === currentPage && 'is-current']} href={page.href} aria-current={page.page === currentPage ? 'page' : undefined}>
+					{page.page}
+				</a>
+			))}
+		</nav>
+	</section>
+</BaseLayout>

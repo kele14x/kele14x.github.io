@@ -28,6 +28,7 @@ const {
 				<a class="brand" href="/">Kele's Blog</a>
 				<nav>
 					<a href="/posts/">Posts</a>
+					<a href="/tags/">Tags</a>
 					<a href="/about/">About</a>
 				</nav>
 			</div>
@@ -240,6 +241,31 @@ const {
 
 	.post-list li {
 		margin: 0;
+	}
+
+	.pagination {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin-top: 1.5rem;
+	}
+
+	.page-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2.5rem;
+		padding: 0.45rem 0.8rem;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+		color: var(--text);
+	}
+
+	.page-link.is-current {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: #f8fafc;
 	}
 
 	.article {

@@ -2,15 +2,28 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const posts = (await getCollection('blog'))
+const pageSize = 10;
+const currentPage = 1;
+const allPosts = (await getCollection('blog'))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-	.slice(0, 8)
 	.map((post) => ({
 		title: post.data.title,
 		date: post.data.date,
 		slug: post.id,
 		tags: post.data.tags ?? [],
 	}));
+
+const pageCount = Math.ceil(allPosts.length / pageSize);
+const posts = allPosts
+	.slice(0, pageSize)
+	.map((post) => ({
+		...post,
+	}));
+
+const pages = Array.from({ length: pageCount }, (_, index) => ({
+	page: index + 1,
+	href: index === 0 ? '/' : `/page/${index + 1}/`,
+}));
 ---
 
 <BaseLayout title="Kele's Blog" description="Notes on FPGA, coding, and communication systems.">
@@ -30,7 +43,6 @@ const posts = (await getCollection('blog'))
 	</section>
 
 	<section>
-		<p class="muted">Recent posts</p>
 		<ul class="post-list">
 			{posts.map((post) => (
 				<li>
@@ -48,5 +60,14 @@ const posts = (await getCollection('blog'))
 				</li>
 			))}
 		</ul>
+		{pageCount > 1 && (
+			<nav class="pagination" aria-label="Posts pagination">
+				{pages.map((page) => (
+					<a class:list={["page-link", page.page === currentPage && 'is-current']} href={page.href} aria-current={page.page === currentPage ? 'page' : undefined}>
+						{page.page}
+					</a>
+				))}
+			</nav>
+		)}
 	</section>
 </BaseLayout>

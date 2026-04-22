@@ -3,11 +3,8 @@ layout: post
 title: Using Vivado Project With Git
 date: 2020-05-06 11:09:03 +0800
 slug: vivado-with-git
-categories:
-- FPGA
 tags:
 - Vivado
-- VCS
 - Git
 ---
 
@@ -48,7 +45,7 @@ To recreate the project at another machine, I write a "create\_project.tcl" scri
 
 ### IP Files
 
-Using IPs from Xilinx and other venders speed up your design and reduce your verification workload. The file for IP is *.xci*. Many files are generated when using the Vivado, such as encrypted/unencrypted hdl file, netlist, simulation netlist, stub file, instant template, OOC constraints, and much more. By default, they all placed in the same folder alone with *.xci*. In theory, they all can be ignored by VCS but only left *.xci* file. *.xci* "should" holds all information to recreate the IP and IP configuration in another machine. 
+Using IPs from Xilinx and other venders speed up your design and reduce your verification workload. The file for IP is *.xci*. Many files are generated when using the Vivado, such as encrypted/unencrypted hdl file, netlist, simulation netlist, stub file, instant template, OOC constraints, and much more. By default, they all placed in the same folder alone with *.xci*. In theory, they all can be ignored by VCS but only left *.xci* file. *.xci* "should" holds all information to recreate the IP and IP configuration in another machine.
 
 But there is another file called *<ip_name>.xml*. It a generated file, but Vivado behavior strange if it does not find it. I face the problem of lost IP configuration when only *.xci* is placed into VCS sometimes, but seems it works well if *.xml* is added. So for IPs, *.xci* and *.xml* is added to VCS. Also *.coe, .mem* files if needed.
 
