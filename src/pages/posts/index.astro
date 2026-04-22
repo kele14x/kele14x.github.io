@@ -16,7 +16,7 @@ const posts = (await getCollection('blog')).sort(
 				<li>
 					<article class="article-card">
 						<p class="meta">{post.data.date.toLocaleDateString('en-CA')}</p>
-						<h2><a href={post.data.permalink ?? `/${post.id}/`}>{post.data.title}</a></h2>
+						<h2><a href={`/${post.id}/`}>{post.data.title}</a></h2>
 						{post.data.tags && post.data.tags.length > 0 && (
 							<ul class="tag-list">
 								{post.data.tags.map((tag) => (

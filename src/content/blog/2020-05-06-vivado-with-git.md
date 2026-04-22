@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Using Vivado Project With Git
-date: '2020-05-06 11:09:03 +0800'
-permalink: "/vivado-with-git/"
+date: 2020-05-06 11:09:03 +0800
+slug: vivado-with-git
 categories:
 - FPGA
 tags:

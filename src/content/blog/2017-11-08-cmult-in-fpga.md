@@ -1,8 +1,8 @@
 ---
 layout: post
 title: FPGA 中复数乘法器的设计
-date: '2017-11-08'
-permalink: "/cmult-in-fpga/"
+date: 2017-11-08
+slug: cmult-in-fpga
 ---
 
 复数乘法是一个常见的运算，尽管 Vivado/SysGen 中自带复数乘法的器的 IP，但很多时候并不是那么好用。让我们看看怎么重新造一个轮子：

@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Vivado Pre-hook Script
-date: '2014-07-04'
-permalink: "/vivado-hook-scripts/"
+date: 2014-07-04
+slug: vivado-hook-scripts
 ---
 
 把 Vivado 升级到了 2014.2，升级之后打开原来的工程文件编译部署没有问题，不过生成 bitstream 文件时有报错：

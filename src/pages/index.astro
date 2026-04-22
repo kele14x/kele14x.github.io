@@ -8,7 +8,7 @@ const posts = (await getCollection('blog'))
 	.map((post) => ({
 		title: post.data.title,
 		date: post.data.date,
-		permalink: post.data.permalink ?? `/${post.id}/`,
+		slug: post.id,
 		tags: post.data.tags ?? [],
 	}));
 ---
@@ -23,7 +23,7 @@ const posts = (await getCollection('blog'))
 				digital signal processing, communication systems, and a few side topics.
 			</p>
 			<p>
-				The archive includes both English and Chinese posts, with the original post URLs preserved.
+				The archive includes both English and Chinese posts.
 			</p>
 		</div>
 		<img src="/assets/images/site/head.webp" alt="Illustration for Kele's Blog" />
@@ -36,7 +36,7 @@ const posts = (await getCollection('blog'))
 				<li>
 					<article class="article-card">
 						<p class="meta">{post.date.toLocaleDateString('en-CA')}</p>
-						<h2><a href={post.permalink}>{post.title}</a></h2>
+						<h2><a href={`/${post.slug}/`}>{post.title}</a></h2>
 						{post.tags.length > 0 && (
 							<ul class="tag-list">
 								{post.tags.map((tag) => (

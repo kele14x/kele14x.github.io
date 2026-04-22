@@ -1,8 +1,8 @@
 ---
 layout: post
 title: FPGA 中的数值修约（Rounding）
-date: '2017-06-26'
-permalink: "/rounding-in-fpga/"
+date: 2017-06-26
+slug: rounding-in-fpga
 ---
 
 对于一个数，如果我们无需那么高的位宽（精度），那么就可以对其修约。修约代表着用一个精度更低（但是更易用）的数来替代它。也许世界上最著名的数值修约的例子就是 $\pi\approx3.14$ 了。

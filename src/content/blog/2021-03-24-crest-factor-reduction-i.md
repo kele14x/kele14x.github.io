@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Crest Factor Reduction I
-date: '2021-03-24'
-permalink: "/crest-factor-reduction-i/"
+date: 2021-03-24
+slug: crest-factor-reduction-i
 ---
 
 CFR is a technique used to reduce the PAPR of the transmitted signals. This a key module in LTE/NR radio. In this serious of post, let's see how a CFR is implemented in digital circuits.

@@ -1,8 +1,8 @@
 ---
 layout: post
 title: SystemVerilog Variable and Net
-date: '2020-12-29'
-permalink: "/systemverilog-variable-and-net/"
+date: 2020-12-29
+slug: systemverilog-variable-and-net
 ---
 
 ## Verilog

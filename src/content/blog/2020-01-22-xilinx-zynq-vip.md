@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Xilinx Zynq Vip
-date: '2020-01-22'
-permalink: "/xilinx-zynq-vip/"
+date: 2020-01-22
+slug: xilinx-zynq-vip
 ---
 
 从 Vivado 2017.1 开始，Xilinx 的 Vivado 中集成了一个新的 IP，叫做 *Zynq-7000 Verification IP*（Zynq VIP）。这个 IP 主要用于 Zynq 处理器的逻辑仿真。根据 [Xilinx 的说法](https://www.xilinx.com/products/design-tools/vivado/verification-ip.html)，这个 IP
