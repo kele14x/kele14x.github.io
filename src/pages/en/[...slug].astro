@@ -3,9 +3,17 @@ import PostPage from '../../templates/PostPage.astro';
 import { getPostsByLocale } from '../../lib/blog';
 
 export async function getStaticPaths() {
-	const posts = await getPostsByLocale('en');
+	const [englishPosts, chinesePosts] = await Promise.all([
+		getPostsByLocale('en'),
+		getPostsByLocale('zh'),
+	]);
+	const postsBySlug = new Map(chinesePosts.map((post) => [post.data.slug, post]));
 
-	return posts.map((post) => ({
+	for (const post of englishPosts) {
+		postsBySlug.set(post.data.slug, post);
+	}
+
+	return [...postsBySlug.values()].map((post) => ({
 		params: {
 			slug: post.data.slug,
 		},

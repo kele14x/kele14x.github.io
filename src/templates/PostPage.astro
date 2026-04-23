@@ -7,7 +7,6 @@ import {
 	getLanguageLabel,
 	getLocaleCopy,
 	getPaginatedPostsPath,
-	getPostTranslation,
 	getPostPath,
 	getPostsIndexPath,
 	getTagPath,
@@ -26,13 +25,10 @@ const copy = getLocaleCopy(locale);
 const { Content } = await render(post);
 const publishedAt = post.data.date.toLocaleDateString('en-CA');
 const alternateLocale = getAlternateLocale(locale);
-const translation = await getPostTranslation(post.data.slug, alternateLocale);
 const homeHref = getPaginatedPostsPath(locale, 1);
 const postsHref = getPostsIndexPath(locale);
 const tagsHref = getTagsIndexPath(locale);
-const languageHref = translation
-	? getPostPath(alternateLocale, translation.data.slug)
-	: getPostPath(locale, post.data.slug);
+const languageHref = getPostPath(alternateLocale, post.data.slug);
 ---
 
 <BaseLayout
