@@ -1,18 +1,10 @@
 ---
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import {
-	getAlternateLocale,
-	getAboutPath,
-	getLanguageLabel,
-	getLocaleCopy,
-	getPaginatedPostsPath,
-	getPostsIndexPath,
-	getPageBySlug,
-	getTagsIndexPath,
-	type Locale,
-	type PageEntry,
-} from '../lib/blog';
+import { getPageBySlug, type PageEntry } from '../lib/content';
+import { getAlternateLocale, type Locale } from '../lib/i18n';
+import { buildLayoutProps } from '../lib/layout';
+import { getAboutPath } from '../lib/paths';
 
 interface Props {
 	locale: Locale;
@@ -20,7 +12,7 @@ interface Props {
 }
 
 const { locale, page } = Astro.props;
-const copy = getLocaleCopy(locale);
+const { copy, homeHref, postsHref, tagsHref, aboutHref, languageLabel, navLabels } = buildLayoutProps(locale);
 const { Content } = await render(page);
 const alternateLocale = getAlternateLocale(locale);
 const alternatePage = await getPageBySlug(alternateLocale, page.data.slug);
@@ -31,13 +23,13 @@ const languageHref = alternatePage ? getAboutPath(alternateLocale) : getAboutPat
 	title={page.data.title}
 	description={page.data.description}
 	locale={locale}
-	homeHref={getPaginatedPostsPath(locale, 1)}
-	postsHref={getPostsIndexPath(locale)}
-	tagsHref={getTagsIndexPath(locale)}
-	aboutHref={getAboutPath(locale)}
+	homeHref={homeHref}
+	postsHref={postsHref}
+	tagsHref={tagsHref}
+	aboutHref={aboutHref}
 	languageHref={languageHref}
-	languageLabel={getLanguageLabel(locale)}
-	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+	languageLabel={languageLabel}
+	navLabels={navLabels}
 >
 	<article class="article">
 		<header class="article-header">

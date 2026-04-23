@@ -1,0 +1,32 @@
+---
+import TagArchivePage from '../../../views/TagArchivePage.astro';
+import { getPostsByLocale } from '../../../lib/content';
+import { LOCALES, isLocale } from '../../../lib/i18n';
+
+export async function getStaticPaths() {
+	const localeTags = await Promise.all(
+		LOCALES.map(async (locale) => {
+			const posts = await getPostsByLocale(locale);
+			const tags = new Set(
+				posts.flatMap((post) => (post.data.tags ?? []).map((tag) => tag.toLowerCase())),
+			);
+
+			return [...tags].map((tag) => ({
+				params: { locale, tag },
+			}));
+		}),
+	);
+
+	return localeTags.flat();
+}
+
+const { locale: localeParam, tag } = Astro.params;
+
+if (!isLocale(localeParam)) {
+	throw new Error(`Unsupported locale: ${localeParam}`);
+}
+
+const locale = localeParam;
+---
+
+<TagArchivePage locale={locale} tag={tag!} />

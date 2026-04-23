@@ -1,19 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import {
-	getAlternateLocale,
-	getAboutPath,
-	hasTagPosts,
-	getLanguageLabel,
-	getLocaleCopy,
-	getPaginatedPostsPath,
-	getPostPath,
-	getPostsByLocale,
-	getPostsIndexPath,
-	getTagPath,
-	getTagsIndexPath,
-	type Locale,
-} from '../lib/blog';
+import { getPostsByLocale } from '../lib/content';
+import { getAlternateLocale, type Locale } from '../lib/i18n';
+import { buildLayoutProps } from '../lib/layout';
+import { getPostPath, getTagPath, getTagsIndexPath } from '../lib/paths';
+import { hasTagPosts } from '../lib/tags';
 
 interface Props {
 	locale: Locale;
@@ -26,14 +17,11 @@ if (!tag) {
 	throw new Error('Missing tag parameter.');
 }
 
-const copy = getLocaleCopy(locale);
+const { copy, homeHref, postsHref, tagsHref, aboutHref, languageLabel, navLabels } = buildLayoutProps(locale);
 const posts = (await getPostsByLocale(locale)).filter((post) =>
 	(post.data.tags ?? []).some((item) => item.toLowerCase() === tag),
 );
 const alternateLocale = getAlternateLocale(locale);
-const homeHref = getPaginatedPostsPath(locale, 1);
-const postsHref = getPostsIndexPath(locale);
-const tagsHref = getTagsIndexPath(locale);
 const languageHref = (await hasTagPosts(tag, alternateLocale))
 	? getTagPath(alternateLocale, tag)
 	: getTagsIndexPath(alternateLocale);
@@ -46,10 +34,10 @@ const languageHref = (await hasTagPosts(tag, alternateLocale))
 	homeHref={homeHref}
 	postsHref={postsHref}
 	tagsHref={tagsHref}
-	aboutHref={getAboutPath(locale)}
+	aboutHref={aboutHref}
 	languageHref={languageHref}
-	languageLabel={getLanguageLabel(locale)}
-	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+	languageLabel={languageLabel}
+	navLabels={navLabels}
 >
 	<section>
 		<ul class="post-list">

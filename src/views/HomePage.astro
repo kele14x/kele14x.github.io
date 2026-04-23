@@ -1,21 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import {
-	getAlternateLocale,
-	getAboutPath,
-	getArchivePageCount,
-	getLanguageLabel,
-	PAGE_SIZE,
-	getLocaleCopy,
-	getPaginatedPostsPath,
-	getPostPath,
-	getPostsByLocale,
-	getPostsIndexPath,
-	getTagPath,
-	getTagsIndexPath,
-	mapPostSummary,
-	type Locale,
-} from '../lib/blog';
+import { PAGE_SIZE, getArchivePageCount, getPostsByLocale, mapPostSummary } from '../lib/content';
+import { getAlternateLocale, type Locale } from '../lib/i18n';
+import { buildLayoutProps } from '../lib/layout';
+import { getPaginatedPostsPath, getPostPath, getTagPath } from '../lib/paths';
 
 interface Props {
 	locale: Locale;
@@ -24,7 +12,7 @@ interface Props {
 }
 
 const { locale, currentPage = 1, showHero = false } = Astro.props;
-const copy = getLocaleCopy(locale);
+const { copy, homeHref, postsHref, tagsHref, aboutHref, languageLabel, navLabels } = buildLayoutProps(locale);
 const allPosts = (await getPostsByLocale(locale)).map(mapPostSummary);
 const pageCount = Math.ceil(allPosts.length / PAGE_SIZE);
 const posts = allPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -37,9 +25,6 @@ const alternatePageCount = await getArchivePageCount(alternateLocale);
 const languageHref = currentPage <= alternatePageCount
 	? getPaginatedPostsPath(alternateLocale, currentPage)
 	: getPaginatedPostsPath(alternateLocale, 1);
-const homeHref = getPaginatedPostsPath(locale, 1);
-const postsHref = getPostsIndexPath(locale);
-const tagsHref = getTagsIndexPath(locale);
 ---
 
 <BaseLayout
@@ -49,10 +34,10 @@ const tagsHref = getTagsIndexPath(locale);
 	homeHref={homeHref}
 	postsHref={postsHref}
 	tagsHref={tagsHref}
-	aboutHref={getAboutPath(locale)}
+	aboutHref={aboutHref}
 	languageHref={languageHref}
-	languageLabel={getLanguageLabel(locale)}
-	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+	languageLabel={languageLabel}
+	navLabels={navLabels}
 >
 	{showHero && (
 		<section class="hero panel">

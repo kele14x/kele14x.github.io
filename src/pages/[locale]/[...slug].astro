@@ -1,0 +1,28 @@
+---
+import PostPage from '../../views/PostPage.astro';
+import { getPostRouteEntries } from '../../lib/content';
+import { LOCALES, isLocale } from '../../lib/i18n';
+
+export async function getStaticPaths() {
+	const localeEntries = await Promise.all(
+		LOCALES.map(async (locale) => {
+			const entries = await getPostRouteEntries(locale);
+
+			return entries.map(({ slug, post }) => ({
+				params: { locale, slug },
+				props: { locale, post },
+			}));
+		}),
+	);
+
+	return localeEntries.flat();
+}
+
+const { locale, post } = Astro.props;
+
+if (!isLocale(locale)) {
+	throw new Error(`Unsupported locale: ${locale}`);
+}
+---
+
+<PostPage locale={locale} post={post} />

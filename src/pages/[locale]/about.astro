@@ -1,0 +1,24 @@
+---
+import AboutPage from '../../views/AboutPage.astro';
+import { getPageBySlug } from '../../lib/content';
+import { LOCALES, isLocale } from '../../lib/i18n';
+
+export async function getStaticPaths() {
+	return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const { locale: localeParam } = Astro.params;
+
+if (!isLocale(localeParam)) {
+	throw new Error(`Unsupported locale: ${localeParam}`);
+}
+
+const locale = localeParam;
+const page = await getPageBySlug(locale, 'about');
+
+if (!page) {
+	throw new Error(`Missing ${locale} about page content.`);
+}
+---
+
+<AboutPage locale={locale} page={page} />

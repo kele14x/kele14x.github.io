@@ -1,0 +1,18 @@
+---
+import TagsIndexPage from '../../../views/TagsIndexPage.astro';
+import { LOCALES, isLocale } from '../../../lib/i18n';
+
+export async function getStaticPaths() {
+	return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const { locale: localeParam } = Astro.params;
+
+if (!isLocale(localeParam)) {
+	throw new Error(`Unsupported locale: ${localeParam}`);
+}
+
+const locale = localeParam;
+---
+
+<TagsIndexPage locale={locale} />
