@@ -36,6 +36,11 @@ const {
 		<main class="shell content">
 			<slot />
 		</main>
+		<footer class="site-footer">
+			<div class="shell footer-inner">
+				<p><a href="https://twitter.com/kele_plus">@kele_plus</a> • <a href="https://github.com/kele14x/kele14x.github.io">GitHub</a> • <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC</a></p>
+			</div>
+		</footer>
 	</body>
 </html>
 
@@ -105,6 +110,15 @@ const {
 
 	.content {
 		padding: 2.5rem 0 4rem;
+	}
+
+	.site-footer {
+		border-top: 1px solid var(--border);
+	}
+
+	.footer-inner {
+		color: var(--muted);
+		text-align: center;
 	}
 
 	.content > :first-child,
@@ -293,5 +307,6 @@ const {
 		.hero {
 			grid-template-columns: 1.15fr 0.85fr;
 		}
+
 	}
 </style>
