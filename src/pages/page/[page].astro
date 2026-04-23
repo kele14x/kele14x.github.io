@@ -36,7 +36,6 @@ const pages = Array.from({ length: pageCount }, (_, index) => ({
 
 <BaseLayout title={`Posts - Page ${currentPage} | Kele's Blog`} description={`Page ${currentPage} of the blog archive.`}>
 	<section>
-		<p class="muted">Archive</p>
 		<ul class="post-list">
 			{posts.map((post) => (
 				<li>

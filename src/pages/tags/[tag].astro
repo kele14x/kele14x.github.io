@@ -24,7 +24,6 @@ export async function getStaticPaths() {
 
 <BaseLayout title={`Posts tagged ${tag} | Kele's Blog`} description={`Archive for tag ${tag}.`}>
 	<section>
-		<p class="muted">#{tag}</p>
 		<ul class="post-list">
 			{posts.map((post) => (
 				<li>

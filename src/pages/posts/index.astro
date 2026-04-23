@@ -9,7 +9,6 @@ const posts = (await getCollection('blog')).sort(
 
 <BaseLayout title="All Posts | Kele's Blog" description="Complete archive of blog posts.">
 	<section>
-		<p class="muted">Posts</p>
 		<ul class="post-list">
 			{posts.map((post) => (
 				<li>
