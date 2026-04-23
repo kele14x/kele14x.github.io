@@ -1,0 +1,19 @@
+---
+import PostPage from '../../templates/PostPage.astro';
+import { getPostsByLocale } from '../../lib/blog';
+
+export async function getStaticPaths() {
+	const posts = await getPostsByLocale('zh');
+
+	return posts.map((post) => ({
+		params: {
+			slug: post.data.slug,
+		},
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+---
+
+<PostPage locale="zh" post={post} />

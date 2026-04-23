@@ -1,0 +1,12 @@
+---
+import AboutPage from '../../templates/AboutPage.astro';
+import { getPageBySlug } from '../../lib/blog';
+
+const page = await getPageBySlug('en', 'about');
+
+if (!page) {
+	throw new Error('Missing en about page content.');
+}
+---
+
+<AboutPage locale="en" page={page} />

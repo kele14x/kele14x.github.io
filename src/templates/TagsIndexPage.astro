@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+	buildTagMap,
+	getAlternateLocale,
+	getAboutPath,
+	getLanguageLabel,
+	getLocaleCopy,
+	getPaginatedPostsPath,
+	getPostsByLocale,
+	getPostsIndexPath,
+	getTagPath,
+	getTagsIndexPath,
+	type Locale,
+} from '../lib/blog';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = getLocaleCopy(locale);
+const tags = buildTagMap(await getPostsByLocale(locale));
+const alternateLocale = getAlternateLocale(locale);
+const homeHref = getPaginatedPostsPath(locale, 1);
+const postsHref = getPostsIndexPath(locale);
+const tagsHref = getTagsIndexPath(locale);
+const languageHref = getTagsIndexPath(alternateLocale);
+---
+
+<BaseLayout
+	title={copy.tagsTitle}
+	description={copy.tagsDescription}
+	locale={locale}
+	homeHref={homeHref}
+	postsHref={postsHref}
+	tagsHref={tagsHref}
+	aboutHref={getAboutPath(locale)}
+	languageHref={languageHref}
+	languageLabel={getLanguageLabel(locale)}
+	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+>
+	<section>
+		<ul class="post-list">
+			{tags.map((tag) => (
+				<li>
+					<article class="article-card">
+						<h2><a href={getTagPath(locale, tag.slug)}>#{tag.label}</a></h2>
+						<p class="meta">{copy.postsLabel(tag.count)}</p>
+					</article>
+				</li>
+			))}
+		</ul>
+	</section>
+</BaseLayout>

@@ -1,73 +1,16 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-
-const pageSize = 10;
-const currentPage = 1;
-const allPosts = (await getCollection('blog'))
-	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-	.map((post) => ({
-		title: post.data.title,
-		date: post.data.date,
-		slug: post.id,
-		tags: post.data.tags ?? [],
-	}));
-
-const pageCount = Math.ceil(allPosts.length / pageSize);
-const posts = allPosts
-	.slice(0, pageSize)
-	.map((post) => ({
-		...post,
-	}));
-
-const pages = Array.from({ length: pageCount }, (_, index) => ({
-	page: index + 1,
-	href: index === 0 ? '/' : `/page/${index + 1}/`,
-}));
+const target = '/zh/';
 ---
 
-<BaseLayout title="Kele's Blog" description="Notes on FPGA, coding, and communication systems.">
-	<section class="hero panel">
-		<div>
-			<p class="muted">Engineering notes and long-form writeups</p>
-			<h1>Kele's Blog</h1>
-			<p>
-				Hi, I'm Kele. This site collects my blog posts, mostly about FPGA,
-				digital signal processing, communication systems, and a few side topics.
-			</p>
-			<p>
-				The archive includes both English and Chinese posts.
-			</p>
-		</div>
-		<img src="/assets/images/site/head.webp" alt="Illustration for Kele's Blog" />
-	</section>
-
-	<section>
-		<ul class="post-list">
-			{posts.map((post) => (
-				<li>
-					<article class="article-card">
-						<p class="meta">{post.date.toLocaleDateString('en-CA')}</p>
-						<h2><a href={`/${post.slug}/`}>{post.title}</a></h2>
-						{post.tags.length > 0 && (
-							<ul class="tag-list">
-								{post.tags.map((tag) => (
-									<li><a class="tag" href={`/tags/${tag.toLowerCase()}/`}>{tag}</a></li>
-								))}
-							</ul>
-						)}
-					</article>
-				</li>
-			))}
-		</ul>
-		{pageCount > 1 && (
-			<nav class="pagination" aria-label="Posts pagination">
-				{pages.map((page) => (
-					<a class:list={["page-link", page.page === currentPage && 'is-current']} href={page.href} aria-current={page.page === currentPage ? 'page' : undefined}>
-						{page.page}
-					</a>
-				))}
-			</nav>
-		)}
-	</section>
-</BaseLayout>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="refresh" content={`0;url=${target}`} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="canonical" href={target} />
+		<title>Redirecting...</title>
+	</head>
+	<body>
+		<p>Redirecting to <a href={target}>{target}</a>.</p>
+	</body>
+</html>

@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+	getAlternateLocale,
+	getAboutPath,
+	getLanguageLabel,
+	getLocaleCopy,
+	getPaginatedPostsPath,
+	getPostPath,
+	getPostsByLocale,
+	getPostsIndexPath,
+	getTagPath,
+	getTagsIndexPath,
+	type Locale,
+} from '../lib/blog';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = getLocaleCopy(locale);
+const posts = await getPostsByLocale(locale);
+const alternateLocale = getAlternateLocale(locale);
+const homeHref = getPaginatedPostsPath(locale, 1);
+const postsHref = getPostsIndexPath(locale);
+const tagsHref = getTagsIndexPath(locale);
+const languageHref = getPostsIndexPath(alternateLocale);
+---
+
+<BaseLayout
+	title={copy.allPostsTitle}
+	description={copy.allPostsDescription}
+	locale={locale}
+	homeHref={homeHref}
+	postsHref={postsHref}
+	tagsHref={tagsHref}
+	aboutHref={getAboutPath(locale)}
+	languageHref={languageHref}
+	languageLabel={getLanguageLabel(locale)}
+	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+>
+	<section>
+		<ul class="post-list">
+			{posts.map((post) => (
+				<li>
+					<article class="article-card">
+						<p class="meta">{post.data.date.toLocaleDateString('en-CA')}</p>
+						<h2><a href={getPostPath(locale, post.data.slug)}>{post.data.title}</a></h2>
+						{post.data.tags && post.data.tags.length > 0 && (
+							<ul class="tag-list">
+								{post.data.tags.map((tag) => (
+									<li><a class="tag" href={getTagPath(locale, tag)}>{tag}</a></li>
+								))}
+							</ul>
+						)}
+					</article>
+				</li>
+			))}
+		</ul>
+	</section>
+</BaseLayout>

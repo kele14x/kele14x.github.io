@@ -1,0 +1,64 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+	getAlternateLocale,
+	getAboutPath,
+	getLanguageLabel,
+	getLocaleCopy,
+	getPaginatedPostsPath,
+	getPostTranslation,
+	getPostPath,
+	getPostsIndexPath,
+	getTagPath,
+	getTagsIndexPath,
+	type BlogPost,
+	type Locale,
+} from '../lib/blog';
+
+interface Props {
+	locale: Locale;
+	post: BlogPost;
+}
+
+const { locale, post } = Astro.props;
+const copy = getLocaleCopy(locale);
+const { Content } = await render(post);
+const publishedAt = post.data.date.toLocaleDateString('en-CA');
+const alternateLocale = getAlternateLocale(locale);
+const translation = await getPostTranslation(post.data.slug, alternateLocale);
+const homeHref = getPaginatedPostsPath(locale, 1);
+const postsHref = getPostsIndexPath(locale);
+const tagsHref = getTagsIndexPath(locale);
+const languageHref = translation
+	? getPostPath(alternateLocale, translation.data.slug)
+	: getPostPath(locale, post.data.slug);
+---
+
+<BaseLayout
+	title={`${post.data.title} | Kele's Blog`}
+	description={post.data.description ?? post.data.title}
+	locale={locale}
+	homeHref={homeHref}
+	postsHref={postsHref}
+	tagsHref={tagsHref}
+	aboutHref={getAboutPath(locale)}
+	languageHref={languageHref}
+	languageLabel={getLanguageLabel(locale)}
+	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+>
+	<article class="article">
+		<header class="article-header">
+			<p class="meta">{publishedAt}</p>
+			<h1>{post.data.title}</h1>
+			{post.data.tags && post.data.tags.length > 0 && (
+				<ul class="tag-list">
+					{post.data.tags.map((tag) => (
+						<li><a class="tag" href={getTagPath(locale, tag)}>{tag}</a></li>
+					))}
+				</ul>
+			)}
+		</header>
+		<Content />
+	</article>
+</BaseLayout>

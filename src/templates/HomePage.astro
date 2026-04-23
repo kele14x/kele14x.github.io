@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+	getAlternateLocale,
+	getAboutPath,
+	getArchivePageCount,
+	getLanguageLabel,
+	PAGE_SIZE,
+	getLocaleCopy,
+	getPaginatedPostsPath,
+	getPostPath,
+	getPostsByLocale,
+	getPostsIndexPath,
+	getTagPath,
+	getTagsIndexPath,
+	mapPostSummary,
+	type Locale,
+} from '../lib/blog';
+
+interface Props {
+	locale: Locale;
+	currentPage?: number;
+	showHero?: boolean;
+}
+
+const { locale, currentPage = 1, showHero = false } = Astro.props;
+const copy = getLocaleCopy(locale);
+const allPosts = (await getPostsByLocale(locale)).map(mapPostSummary);
+const pageCount = Math.ceil(allPosts.length / PAGE_SIZE);
+const posts = allPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+const pages = Array.from({ length: pageCount }, (_, index) => ({
+	page: index + 1,
+	href: getPaginatedPostsPath(locale, index + 1),
+}));
+const alternateLocale = getAlternateLocale(locale);
+const alternatePageCount = await getArchivePageCount(alternateLocale);
+const languageHref = currentPage <= alternatePageCount
+	? getPaginatedPostsPath(alternateLocale, currentPage)
+	: getPaginatedPostsPath(alternateLocale, 1);
+const homeHref = getPaginatedPostsPath(locale, 1);
+const postsHref = getPostsIndexPath(locale);
+const tagsHref = getTagsIndexPath(locale);
+---
+
+<BaseLayout
+	title={copy.siteTitle}
+	description={copy.homeDescription}
+	locale={locale}
+	homeHref={homeHref}
+	postsHref={postsHref}
+	tagsHref={tagsHref}
+	aboutHref={getAboutPath(locale)}
+	languageHref={languageHref}
+	languageLabel={getLanguageLabel(locale)}
+	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+>
+	{showHero && (
+		<section class="hero panel">
+			<div>
+				<p class="muted">{copy.heroEyebrow}</p>
+				<h1>Kele's Blog</h1>
+				<p>{copy.heroIntro}</p>
+				<p>{copy.heroDetail}</p>
+			</div>
+			<img src="/assets/images/site/head.webp" alt="Illustration for Kele's Blog" />
+		</section>
+	)}
+
+	<section>
+		<ul class="post-list">
+			{posts.map((post) => (
+				<li>
+					<article class="article-card">
+						<p class="meta">{post.date.toLocaleDateString('en-CA')}</p>
+						<h2><a href={getPostPath(locale, post.slug)}>{post.title}</a></h2>
+						{post.tags.length > 0 && (
+							<ul class="tag-list">
+								{post.tags.map((tag) => (
+									<li><a class="tag" href={getTagPath(locale, tag)}>{tag}</a></li>
+								))}
+							</ul>
+						)}
+					</article>
+				</li>
+			))}
+		</ul>
+		{pageCount > 1 && (
+			<nav class="pagination" aria-label={copy.paginationLabel}>
+				{pages.map((page) => (
+					<a class:list={['page-link', page.page === currentPage && 'is-current']} href={page.href} aria-current={page.page === currentPage ? 'page' : undefined}>
+						{page.page}
+					</a>
+				))}
+			</nav>
+		)}
+	</section>
+</BaseLayout>

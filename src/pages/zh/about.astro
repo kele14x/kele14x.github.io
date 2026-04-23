@@ -1,0 +1,12 @@
+---
+import AboutPage from '../../templates/AboutPage.astro';
+import { getPageBySlug } from '../../lib/blog';
+
+const page = await getPageBySlug('zh', 'about');
+
+if (!page) {
+	throw new Error('Missing zh about page content.');
+}
+---
+
+<AboutPage locale="zh" page={page} />

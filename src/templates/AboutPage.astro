@@ -1,0 +1,48 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+	getAlternateLocale,
+	getAboutPath,
+	getLanguageLabel,
+	getLocaleCopy,
+	getPaginatedPostsPath,
+	getPostsIndexPath,
+	getPageBySlug,
+	getTagsIndexPath,
+	type Locale,
+	type PageEntry,
+} from '../lib/blog';
+
+interface Props {
+	locale: Locale;
+	page: PageEntry;
+}
+
+const { locale, page } = Astro.props;
+const copy = getLocaleCopy(locale);
+const { Content } = await render(page);
+const alternateLocale = getAlternateLocale(locale);
+const alternatePage = await getPageBySlug(alternateLocale, page.data.slug);
+const languageHref = alternatePage ? getAboutPath(alternateLocale) : getAboutPath(locale);
+---
+
+<BaseLayout
+	title={page.data.title}
+	description={page.data.description}
+	locale={locale}
+	homeHref={getPaginatedPostsPath(locale, 1)}
+	postsHref={getPostsIndexPath(locale)}
+	tagsHref={getTagsIndexPath(locale)}
+	aboutHref={getAboutPath(locale)}
+	languageHref={languageHref}
+	languageLabel={getLanguageLabel(locale)}
+	navLabels={{ posts: copy.navPosts, tags: copy.navTags, about: copy.navAbout }}
+>
+	<article class="article">
+		<header class="article-header">
+			<h1>{page.data.title}</h1>
+		</header>
+		<Content />
+	</article>
+</BaseLayout>

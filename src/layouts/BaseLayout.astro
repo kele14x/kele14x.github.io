@@ -4,15 +4,39 @@ import 'katex/dist/katex.min.css';
 interface Props {
 	title?: string;
 	description?: string;
+	locale?: 'zh' | 'en';
+	homeHref?: string;
+	postsHref?: string;
+	tagsHref?: string;
+	aboutHref?: string;
+	languageHref?: string;
+	languageLabel?: string;
+	navLabels?: {
+		posts: string;
+		tags: string;
+		about: string;
+	};
 }
 
 const {
 	title = "Kele's Blog",
 	description = 'Notes on FPGA, communication systems, and engineering topics.',
+	locale = 'en',
+	homeHref = '/',
+	postsHref = '/posts/',
+	tagsHref = '/tags/',
+	aboutHref = '/about/',
+	languageHref,
+	languageLabel,
+	navLabels = {
+		posts: 'Posts',
+		tags: 'Tags',
+		about: 'About',
+	},
 } = Astro.props;
 ---
 
-<html lang="en">
+<html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -25,11 +49,12 @@ const {
 	<body>
 		<header class="site-header">
 			<div class="shell header-inner">
-				<a class="brand" href="/">Kele's Blog</a>
+				<a class="brand" href={homeHref}>Kele's Blog</a>
 				<nav>
-					<a href="/posts/">Posts</a>
-					<a href="/tags/">Tags</a>
-					<a href="/about/">About</a>
+					<a href={postsHref}>{navLabels.posts}</a>
+					<a href={tagsHref}>{navLabels.tags}</a>
+					<a href={aboutHref}>{navLabels.about}</a>
+					{languageHref && languageLabel && <a href={languageHref}>{languageLabel}</a>}
 				</nav>
 			</div>
 		</header>
