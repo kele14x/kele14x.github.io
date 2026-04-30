@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import type { BlogPost } from '../lib/content';
-import { getAlternateLocale, type Locale } from '../lib/i18n';
+import { getAlternateLocale, getSiteTitle, type Locale } from '../lib/i18n';
 import { buildLayoutProps } from '../lib/layout';
 import { getPostPath, getTagPath } from '../lib/paths';
 
@@ -17,10 +17,11 @@ const { Content } = await render(post);
 const publishedAt = post.data.date.toLocaleDateString('en-CA');
 const alternateLocale = getAlternateLocale(locale);
 const languageHref = getPostPath(alternateLocale, post.data.slug);
+const siteTitle = getSiteTitle();
 ---
 
 <BaseLayout
-	title={`${post.data.title} | Kele's Blog`}
+	title={`${post.data.title} | ${siteTitle}`}
 	description={post.data.description ?? post.data.title}
 	locale={locale}
 	homeHref={homeHref}

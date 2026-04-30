@@ -1,5 +1,6 @@
 ---
 import 'katex/dist/katex.min.css';
+import { SITE_TITLE } from '../lib/i18n';
 
 interface Props {
 	title?: string;
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const {
-	title = "Kele's Blog",
+	title = SITE_TITLE,
 	description = 'Notes on FPGA, communication systems, and engineering topics.',
 	locale = 'en',
 	homeHref = '/',
@@ -49,7 +50,7 @@ const {
 	<body>
 		<header class="site-header">
 			<div class="shell header-inner">
-				<a class="brand" href={homeHref}>Kele's Blog</a>
+				<a class="brand" href={homeHref}>{SITE_TITLE}</a>
 				<nav class="site-nav">
 					<a href={postsHref}>{navLabels.posts}</a>
 					<a href={tagsHref}>{navLabels.tags}</a>

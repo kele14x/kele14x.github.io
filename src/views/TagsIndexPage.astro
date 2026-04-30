@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPostsByLocale } from '../lib/content';
-import { getAlternateLocale, type Locale } from '../lib/i18n';
+import { getAlternateLocale, getTagsTitle, type Locale } from '../lib/i18n';
 import { buildLayoutProps } from '../lib/layout';
 import { getTagPath, getTagsIndexPath } from '../lib/paths';
 import { buildTagMap } from '../lib/tags';
@@ -15,10 +15,11 @@ const { copy, homeHref, postsHref, tagsHref, aboutHref, languageLabel, navLabels
 const tags = buildTagMap(await getPostsByLocale(locale));
 const alternateLocale = getAlternateLocale(locale);
 const languageHref = getTagsIndexPath(alternateLocale);
+const tagsTitle = getTagsTitle(locale);
 ---
 
 <BaseLayout
-	title={copy.tagsTitle}
+	title={tagsTitle}
 	description={copy.tagsDescription}
 	locale={locale}
 	homeHref={homeHref}

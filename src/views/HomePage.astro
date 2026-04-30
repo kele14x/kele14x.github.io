@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { PAGE_SIZE, getArchivePageCount, getPostsByLocale, mapPostSummary } from '../lib/content';
-import { getAlternateLocale, type Locale } from '../lib/i18n';
+import { getAlternateLocale, getSiteTitle, type Locale } from '../lib/i18n';
 import { buildLayoutProps } from '../lib/layout';
 import { getPaginatedPostsPath, getPostPath, getTagPath } from '../lib/paths';
 
@@ -25,11 +25,14 @@ const alternatePageCount = await getArchivePageCount(alternateLocale);
 const languageHref = currentPage <= alternatePageCount
 	? getPaginatedPostsPath(alternateLocale, currentPage)
 	: getPaginatedPostsPath(alternateLocale, 1);
+const siteTitle = getSiteTitle();
+const pageTitle = currentPage === 1 ? siteTitle : copy.postsPageTitle(currentPage);
+const pageDescription = currentPage === 1 ? copy.siteDescription : copy.postsPageDescription(currentPage);
 ---
 
 <BaseLayout
-	title={copy.siteTitle}
-	description={copy.homeDescription}
+	title={pageTitle}
+	description={pageDescription}
 	locale={locale}
 	homeHref={homeHref}
 	postsHref={postsHref}
@@ -42,8 +45,6 @@ const languageHref = currentPage <= alternatePageCount
 	{showHero && (
 		<section class="hero panel">
 			<div>
-				<p class="muted">{copy.heroEyebrow}</p>
-				<h1>Kele's Blog</h1>
 				<p>{copy.heroIntro}</p>
 				<p>{copy.heroDetail}</p>
 			</div>
