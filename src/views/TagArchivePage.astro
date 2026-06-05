@@ -4,6 +4,7 @@ import { getPostsByLocale } from '../lib/content';
 import { getAlternateLocale, type Locale } from '../lib/i18n';
 import { buildLayoutProps } from '../lib/layout';
 import { getPostPath, getTagPath, getTagsIndexPath } from '../lib/paths';
+import { getTagHero } from '../lib/tagHeroes';
 import { hasTagPosts } from '../lib/tags';
 
 interface Props {
@@ -21,6 +22,7 @@ const { copy, homeHref, postsHref, tagsHref, aboutHref, languageLabel, navLabels
 const posts = (await getPostsByLocale(locale)).filter((post) =>
 	(post.data.tags ?? []).some((item) => item.toLowerCase() === tag),
 );
+const hero = getTagHero(tag, locale);
 const alternateLocale = getAlternateLocale(locale);
 const languageHref = (await hasTagPosts(tag, alternateLocale))
 	? getTagPath(alternateLocale, tag)
@@ -39,6 +41,15 @@ const languageHref = (await hasTagPosts(tag, alternateLocale))
 	languageLabel={languageLabel}
 	navLabels={navLabels}
 >
+	{hero && (
+		<section class="hero panel">
+			<div>
+				<p>{hero.intro}</p>
+				{hero.detail && <p>{hero.detail}</p>}
+			</div>
+			{hero.image && <img src={hero.image} alt={tag} />}
+		</section>
+	)}
 	<section>
 		<ul class="post-list">
 			{posts.map((post) => (
